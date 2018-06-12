@@ -13,6 +13,7 @@
     "karma": "karma start ./karma.conf.js --single-run",
     "devTest": "ng test",
     "dev": "ng serve --verbose --proxy-config proxy.conf.json",
+    "vm-dev": "ng serve --verbose --proxy-config proxy.conf.json --disable-host-check",
     "runProd": "ng serve --proxy-config proxy.conf.json --prod",
     "build": "ng build --prod",
     "checkLicenses": "license-to-fail ./license.config.js",
