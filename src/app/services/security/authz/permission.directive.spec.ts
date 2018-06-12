@@ -1,25 +1,27 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Component} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {PermissionDirective} from './permission.directive';
 import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 import {FimsPermission} from './fims-permission.model';
 
 describe('Test permission directive', () => {
@@ -29,12 +31,13 @@ describe('Test permission directive', () => {
       providers: [
         {
           provide: Store, useClass: class {
-            select = function(){}
-          }
+          select = function () {
+          };
+        }
         }
       ],
-      declarations: [PermissionDirective, TestComponentWithObject]
-    })
+      declarations: [PermissionDirective, TestComponent]
+    });
   });
 
   describe('Test permission directive with object parameter', () => {
@@ -42,10 +45,10 @@ describe('Test permission directive', () => {
       const store = TestBed.get(Store);
 
       spyOn(store, 'select').and.returnValue(Observable.of<FimsPermission[]>([
-        { id: 'office_offices', accessLevel: 'READ'}
+        {id: 'office_offices', accessLevel: 'READ'}
       ]));
 
-      const fixture = TestBed.createComponent(TestComponentWithObject);
+      const fixture = TestBed.createComponent(TestComponent);
       fixture.detectChanges();
 
       const element = fixture.debugElement.query(By.css('button'));
@@ -56,11 +59,11 @@ describe('Test permission directive', () => {
       const store = TestBed.get(Store);
       spyOn(store, 'select').and.returnValue(Observable.of([]));
 
-      const fixture = TestBed.createComponent(TestComponentWithObject);
+      const fixture = TestBed.createComponent(TestComponent);
       fixture.detectChanges();
       const element = fixture.debugElement.query(By.css('button'));
       expect(element).toBeNull('Button should be not existent within the dom');
-    })
+    });
   });
 
 });
@@ -70,4 +73,5 @@ describe('Test permission directive', () => {
     <button *hasPermission="{ id: 'office_offices', accessLevel: 'READ' }">randomTestValue</button>
   `
 })
-class TestComponentWithObject{}
+class TestComponent {
+}

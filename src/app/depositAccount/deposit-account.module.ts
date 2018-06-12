@@ -1,19 +1,21 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Store} from '@ngrx/store';
 import {DepositAccountStore, depositAccountStoreFactory} from './store/index';
 import {DepositProductDefinitionNotificationEffects} from './store/effects/notification.effects';
@@ -22,9 +24,16 @@ import {DepositProductDefinitionApiEffects} from './store/effects/service.effect
 import {EffectsModule} from '@ngrx/effects';
 import {CovalentMessageModule, CovalentStepsModule} from '@covalent/core';
 import {
-  MdButtonModule, MdCardModule, MdCheckboxModule, MdIconModule, MdInputModule, MdListModule, MdRadioModule,
-  MdSelectModule, MdSlideToggleModule,
-  MdToolbarModule
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatSlideToggleModule,
+  MatToolbarModule
 } from '@angular/material';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
@@ -39,7 +48,6 @@ import {DepositProductCreateComponent} from './form/create.component';
 import {DepositProductFormComponent} from './form/form.component';
 import {DepositProductChargesFormComponent} from './form/charges/charges.component';
 import {DepositProductDetailComponent} from './detail/deposit-product.detail.component';
-import {DepositProductStatusComponent} from './detail/status/status.component';
 import {DepositProductIndexComponent} from './detail/deposit-product.index.component';
 import {DepositProductEditComponent} from './form/edit.component';
 import {DepositProductDividendsComponent} from './detail/dividends/dividends.component';
@@ -57,16 +65,16 @@ import {CreateDividendFormComponent} from './detail/dividends/form/create.compon
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MdCardModule,
-    MdIconModule,
-    MdListModule,
-    MdToolbarModule,
-    MdInputModule,
-    MdButtonModule,
-    MdSelectModule,
-    MdRadioModule,
-    MdCheckboxModule,
-    MdSlideToggleModule,
+    MatCardModule,
+    MatIconModule,
+    MatListModule,
+    MatToolbarModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    MatSlideToggleModule,
 
     CovalentStepsModule,
     CovalentMessageModule,
@@ -87,7 +95,6 @@ import {CreateDividendFormComponent} from './detail/dividends/form/create.compon
     DepositProductChargesFormComponent,
     DepositProductIndexComponent,
     DepositProductDetailComponent,
-    DepositProductStatusComponent,
     DepositProductDividendsComponent,
     CreateDividendFormComponent,
     DividendFormComponent

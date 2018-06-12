@@ -1,46 +1,42 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
-import {AsyncValidatorFn, AbstractControl} from '@angular/forms';
-import {Observable} from 'rxjs';
+import {AbstractControl, AsyncValidatorFn} from '@angular/forms';
+import {Observable} from 'rxjs/Observable';
 import {AccountingService} from '../../../../../services/accounting/accounting.service';
-import {FetchRequest} from '../../../../../services/domain/paging/fetch-request.model';
+import {isEmptyInputValue, isString} from '../../../../../common/validator/validators';
+
+const invalid = Observable.of({
+  invalidTransactionType: true
+});
 
 export function transactionTypeExists(accountingService: AccountingService): AsyncValidatorFn {
   return (control: AbstractControl): Observable<any> => {
-    if (!control.dirty || !control.value || control.value.length === 0) return Observable.of(null);
+    if (!control.dirty || isEmptyInputValue(control.value)) {
+      return Observable.of(null);
+    }
 
-    let fetchRequest: FetchRequest = {
-      page: {
-        pageIndex: 0,
-        size: 1
-      },
-      searchTerm: control.value
-    };
+    if (isString(control.value) && control.value.trim().length === 0) {
+      return invalid;
+    }
 
-    return Observable.of(fetchRequest)
-      .switchMap(fetchRequest => accountingService.fetchTransactionTypes(fetchRequest))
-      .map(transactionTypePage => transactionTypePage.transactionTypes)
-      .map(transactionTypes => {
-        if(transactionTypes.length === 1 && transactionTypes[0].code === control.value){
-          return null;
-        }
-        return {
-          invalidTransactionType: true
-        }
-      });
-  }
+    return accountingService.findTransactionType(control.value, true)
+      .map(account => null)
+      .catch(() => invalid);
+  };
 }

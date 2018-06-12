@@ -1,34 +1,34 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import {Injectable} from '@angular/core';
 import {Headers, Http, Request, RequestMethod, RequestOptions, RequestOptionsArgs, Response} from '@angular/http';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
-import 'rxjs/add/operator/finally';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../../store';
 import {LOGOUT} from '../../store/security/security.actions';
 
 export enum Action { QueryStart, QueryStop }
 
-export const TENANT_HEADER: string = 'X-Tenant-Identifier';
-export const USER_HEADER: string = 'User';
-export const AUTHORIZATION_HEADER: string = 'Authorization';
+export const TENANT_HEADER = 'X-Tenant-Identifier';
+export const USER_HEADER = 'User';
+export const AUTHORIZATION_HEADER = 'Authorization';
 
 @Injectable()
 export class HttpClient {
@@ -37,7 +37,8 @@ export class HttpClient {
 
   error: Subject<any> = new Subject<any>();
 
-  constructor(private http: Http, private store: Store<fromRoot.State>) {}
+  constructor(private http: Http, private store: Store<fromRoot.State>) {
+  }
 
   public get(url: string, options?: RequestOptionsArgs, silent?: boolean): Observable<any> {
     return this.createRequest(RequestMethod.Get, url, undefined, options, silent);
@@ -55,12 +56,13 @@ export class HttpClient {
     return this.createRequest(RequestMethod.Delete, url, undefined, options);
   }
 
-  private _buildRequestOptions(method: RequestMethod, url: string, body: any, tenant: string, username: string, accessToken: string, options?: RequestOptionsArgs): RequestOptions{
+  private _buildRequestOptions(method: RequestMethod, url: string, body: any, tenant: string, username: string,
+                               accessToken: string, options?: RequestOptionsArgs): RequestOptions {
     options = options || {};
 
     const headers = new Headers();
 
-    if(!(body instanceof FormData)) {
+    if (!(body instanceof FormData)) {
       headers.set('Accept', 'application/json');
       headers.set('Content-Type', 'application/json');
     }
@@ -86,28 +88,34 @@ export class HttpClient {
       .flatMap(requestOptions => {
         this.process.next(Action.QueryStart);
 
-        let request: Observable<any> = this.http.request(new Request(requestOptions))
+        const request: Observable<any> = this.http.request(new Request(requestOptions))
           .catch((err: any) => {
             const error = err.json();
-            if(silent) return Observable.throw(error);
+            if (silent) {
+              return Observable.throw(error);
+            }
 
             switch (error.status) {
               case 409:
                 return Observable.throw(error);
               case 401:
               case 403:
-                this.store.dispatch({ type: LOGOUT });
+                this.store.dispatch({type: LOGOUT});
                 return Observable.throw('User is not authenticated');
               default:
-                console.debug('Error', error);
+                console.error('Error', error);
                 this.error.next(error);
                 return Observable.throw(error);
             }
           }).finally(() => this.process.next(Action.QueryStop));
 
         return request.map((res: Response) => {
-          if(res.text()) {
-            return res.json()
+          if (res.text()) {
+            try {
+              return res.json();
+            } catch (err) {
+              return res.text();
+            }
           }
         });
       });

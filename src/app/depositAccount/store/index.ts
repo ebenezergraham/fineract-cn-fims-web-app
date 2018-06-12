@@ -1,28 +1,25 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {ActionReducer, Store} from '@ngrx/store';
 import {createReducer} from '../../store/index';
 import {createFormReducer, FormState, getFormError} from '../../common/store/form.reducer';
-import {
-  createResourceReducer,
-  getResourceLoadedAt,
-  getResourceSelected,
-  ResourceState
-} from '../../common/store/resource.reducer';
+import {createResourceReducer, getResourceLoadedAt, getResourceSelected, ResourceState} from '../../common/store/resource.reducer';
 
 import * as fromRoot from '../../store';
 import * as fromProducts from './products.reducer';
@@ -36,11 +33,11 @@ import {
   SearchState
 } from '../../common/store/search.reducer';
 
-export interface State extends fromRoot.State{
+export interface State extends fromRoot.State {
   depositProducts: ResourceState;
   depositProductForm: FormState;
   depositProductSearch: SearchState;
-  depositProductDividends: fromDividends.State
+  depositProductDividends: fromDividends.State;
 }
 
 const reducers = {
@@ -52,9 +49,9 @@ const reducers = {
 
 export const depositAccountModuleReducer: ActionReducer<State> = createReducer(reducers);
 
-export class DepositAccountStore extends Store<State>{}
+export class DepositAccountStore extends Store<State> {}
 
-export function depositAccountStoreFactory(appStore: Store<fromRoot.State>){
+export function depositAccountStoreFactory(appStore: Store<fromRoot.State>) {
   appStore.replaceReducer(depositAccountModuleReducer);
   return appStore;
 }
@@ -76,7 +73,8 @@ export const getSearchProducts = createSelector(getProductSearchState, getSearch
 export const getProductSearchTotalElements = createSelector(getProductSearchState, getSearchTotalElements);
 export const getProductSearchTotalPages = createSelector(getProductSearchState, getSearchTotalPages);
 
-export const getProductSearchResults = createSelector(getSearchProducts, getProductSearchTotalPages, getProductSearchTotalElements, (products, totalPages, totalElements) => {
+export const getProductSearchResults = createSelector(getSearchProducts, getProductSearchTotalPages, getProductSearchTotalElements,
+  (products, totalPages, totalElements) => {
   return {
     products: products,
     totalPages: totalPages,

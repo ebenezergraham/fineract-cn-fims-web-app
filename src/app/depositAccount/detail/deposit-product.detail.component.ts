@@ -1,19 +1,21 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductDefinition} from '../../services/depositAccount/domain/definition/product-definition.model';
 import {Subscription} from 'rxjs/Subscription';
@@ -24,7 +26,7 @@ import * as fromRoot from '../../store';
 import {TableData} from '../../common/data-table/data-table.component';
 import {TdDialogService} from '@covalent/core';
 import {Observable} from 'rxjs/Observable';
-import {DELETE} from '../store/product.actions';
+import {DELETE, EXECUTE_COMMAND} from '../store/product.actions';
 import {FimsPermission} from '../../services/security/authz/fims-permission.model';
 
 @Component({
@@ -34,7 +36,7 @@ export class DepositProductDetailComponent implements OnInit, OnDestroy {
 
   private productSubscription: Subscription;
 
-  numberFormat: string = '1.2-2';
+  numberFormat = '1.2-2';
 
   definition: ProductDefinition;
 
@@ -51,7 +53,8 @@ export class DepositProductDetailComponent implements OnInit, OnDestroy {
     { name: 'amount', label: 'Amount', numeric: true, format: value => value ? value.toFixed(2) : undefined }
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private store: DepositAccountStore, private dialogService: TdDialogService) {}
+  constructor(private router: Router, private route: ActivatedRoute, private store: DepositAccountStore,
+              private dialogService: TdDialogService) {}
 
   ngOnInit(): void {
     const selectedProduct$ = this.store.select(fromDepositAccounts.getSelectedProduct)
@@ -64,7 +67,7 @@ export class DepositProductDetailComponent implements OnInit, OnDestroy {
           data: product.charges,
           totalElements: product.charges.length,
           totalPages: 1
-        }
+        };
       });
 
     this.canDistributeDividends$ = Observable.combineLatest(
@@ -82,7 +85,7 @@ export class DepositProductDetailComponent implements OnInit, OnDestroy {
   }
 
   goToTasks(): void {
-    this.router.navigate(['tasks'], { relativeTo: this.route })
+    this.router.navigate(['tasks'], { relativeTo: this.route });
   }
 
   confirmDeletion(): Observable<boolean> {
@@ -112,6 +115,24 @@ export class DepositProductDetailComponent implements OnInit, OnDestroy {
     return permissions.filter(permission =>
       permission.id === 'deposit_definitions' &&
       permission.accessLevel === 'CHANGE'
-    ).length > 0
+    ).length > 0;
+  }
+
+  enableProduct(): void {
+    this.store.dispatch({ type: EXECUTE_COMMAND, payload: {
+      definitionId: this.definition.identifier,
+      command: {
+        action: 'ACTIVATE'
+      }
+    }});
+  }
+
+  disableProduct(): void {
+    this.store.dispatch({ type: EXECUTE_COMMAND, payload: {
+      definitionId: this.definition.identifier,
+      command: {
+        action: 'DEACTIVATE'
+      }
+    }});
   }
 }

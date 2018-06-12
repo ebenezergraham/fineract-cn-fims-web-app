@@ -1,25 +1,28 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-import {Component, ViewChild, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {Observable} from 'rxjs/Observable';
 import {TdStepComponent} from '@covalent/core';
 import {Office} from '../../services/office/domain/office.model';
 import {Employee} from '../../services/office/domain/employee.model';
-import {ContactDetail, BUSINESS, PHONE, EMAIL, MOBILE} from '../../services/domain/contact/contact-detail.model';
+import {BUSINESS, ContactDetail, EMAIL, MOBILE, PHONE} from '../../services/domain/contact/contact-detail.model';
 import {FetchRequest} from '../../services/domain/paging/fetch-request.model';
 import {Role} from '../../services/identity/domain/role.model';
 import {User} from '../../services/identity/domain/user.model';
@@ -34,30 +37,30 @@ export interface EmployeeFormData {
   employee: Employee;
 }
 
-export interface EmployeeSaveEvent{
+export interface EmployeeSaveEvent {
   detailForm: {
-    identifier: string,
-    firstName: string,
-    middleName: string,
-    lastName: string,
-    password: string,
-    role: string
-  },
+    identifier: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    password: string;
+    role: string;
+  };
   contactForm: {
-    email: string,
-    phone: string,
-    mobile: string,
-  },
+    email: string;
+    phone: string;
+    mobile: string;
+  };
   officeForm: {
-    assignedOffice: string,
-  }
+    assignedOffice: string;
+  };
 }
 
 @Component({
   selector: 'fims-employee-form-component',
   templateUrl: './form.component.html'
 })
-export class EmployeeFormComponent implements OnInit{
+export class EmployeeFormComponent implements OnInit {
 
   offices: Observable<Office[]>;
 
@@ -82,7 +85,7 @@ export class EmployeeFormComponent implements OnInit{
 
   constructor(private formBuilder: FormBuilder, private store: Store<fromRoot.State>) {}
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.offices = this.store.select(fromRoot.getOfficeSearchResults)
       .map(officePage => officePage.offices);
 
@@ -95,12 +98,18 @@ export class EmployeeFormComponent implements OnInit{
   }
 
   prepareDetailForm(employee: Employee, user: User): void {
+    const passwordValidators: ValidatorFn[] = [Validators.minLength(8)];
+
+    if (!this.editMode) {
+      passwordValidators.push(Validators.required);
+    }
+
     this.detailForm = this.formBuilder.group({
       identifier: [employee.identifier, [Validators.required, Validators.minLength(3), Validators.maxLength(32), FimsValidators.urlSafe]],
       firstName: [employee.givenName, [Validators.required, Validators.maxLength(256)]],
       middleName: [employee.middleName, Validators.maxLength(256)],
       lastName: [employee.surname, [Validators.required, Validators.maxLength(256)]],
-      password: ['', this.editMode ? Validators.nullValidator : Validators.required],
+      password: ['', passwordValidators],
       role: [user ? user.role : '', Validators.required]
     });
   }
@@ -111,14 +120,14 @@ export class EmployeeFormComponent implements OnInit{
     });
   }
 
-  private prepareContactForm(contactDetails: ContactDetail[]): void{
-    let phone: string = '';
-    let mobile: string = '';
-    let email: string = '';
+  private prepareContactForm(contactDetails: ContactDetail[]): void {
+    let phone = '';
+    let mobile = '';
+    let email = '';
 
-    let businessContacts: ContactDetail[] = contactDetails.filter(contactDetail => contactDetail.group === BUSINESS);
+    const businessContacts: ContactDetail[] = contactDetails.filter(contactDetail => contactDetail.group === BUSINESS);
 
-    if(businessContacts.length){
+    if (businessContacts.length) {
       phone = this.getFirstItemByType(businessContacts, PHONE);
       mobile = this.getFirstItemByType(businessContacts, MOBILE);
       email = this.getFirstItemByType(businessContacts, EMAIL);
@@ -131,18 +140,18 @@ export class EmployeeFormComponent implements OnInit{
     });
   }
 
-  getFirstItemByType(contactDetails: ContactDetail[], type: string): string{
-    let items = contactDetails.filter(contact => contact.type === type);
+  getFirstItemByType(contactDetails: ContactDetail[], type: string): string {
+    const items = contactDetails.filter(contact => contact.type === type);
     return items.length ? items[0].value : '';
   }
 
-  formsInvalid(): boolean{
+  formsInvalid(): boolean {
     return (!this.officeForm.pristine && this.officeForm.invalid) ||
     (!this.contactForm.pristine && this.contactForm.invalid)
       || this.detailForm.invalid;
   }
 
-  save(): void{
+  save(): void {
     this.onSave.emit({
       detailForm: this.detailForm.value,
       contactForm: this.contactForm.value,
@@ -150,18 +159,18 @@ export class EmployeeFormComponent implements OnInit{
     });
   }
 
-  cancel(): void{
+  cancel(): void {
     this.onCancel.emit();
   }
 
   searchOffice(searchTerm: string): void {
-    let fetchRequest: FetchRequest = {
-      searchTerm: searchTerm
+    const fetchRequest: FetchRequest = {
+      searchTerm
     };
     this.store.dispatch({ type: SEARCH_OFFICE, payload: fetchRequest });
   }
 
-  assignOffice(selections: string[]): void{
+  assignOffice(selections: string[]): void {
     this.setFormValue(this.officeForm, {'assignedOffice': selections && selections.length > 0 ? selections[0] : undefined});
   }
 
@@ -169,7 +178,7 @@ export class EmployeeFormComponent implements OnInit{
     this.store.dispatch({ type: SEARCH_ROLE });
   }
 
-  private setFormValue(form: FormGroup, value: any){
+  private setFormValue(form: FormGroup, value: any) {
     form.setValue(value);
     form.markAsDirty();
   }

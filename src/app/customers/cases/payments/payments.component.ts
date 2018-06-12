@@ -1,46 +1,50 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PlannedPaymentPage} from '../../../services/portfolio/domain/individuallending/planned-payment-page.model';
 import * as fromCases from '../store/index';
 import {CasesStore} from '../store/index';
-import {Observable, Subscription} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
+import {Subscription} from 'rxjs/Subscription';
 import {SEARCH} from '../store/payments/payment.actions';
 import {PlannedPayment} from '../../../services/portfolio/domain/individuallending/planned-payment.model';
-import {CostComponent} from '../../../services/portfolio/domain/individuallending/cost-component.model';
+import {CostComponent} from '../../../services/portfolio/domain/cost-component.model';
 import {ChargeName} from '../../../services/portfolio/domain/individuallending/charge-name.model';
 import {todayAsISOString} from '../../../services/domain/date.converter';
 import {FimsCase} from '../../../services/portfolio/domain/fims-case.model';
 
 interface CostComponents {
-  [id: string]: CostComponent
+  [id: string]: CostComponent;
 }
 
 interface PaymentRow {
-  interestRate: number;
-  remainingPrincipal: number;
-  date: string;
-  costComponents: CostComponents
+  date?: string;
+  payment?: number;
+  interest?: number;
+  principal?: number;
+  balance: number;
 }
 
 @Component({
   templateUrl: './payments.component.html'
 })
-export class CasePaymentsComponent implements OnInit, OnDestroy{
+export class CasePaymentsComponent implements OnInit, OnDestroy {
 
   private caseSubscription: Subscription;
 
@@ -54,26 +58,44 @@ export class CasePaymentsComponent implements OnInit, OnDestroy{
 
   constructor(private casesStore: CasesStore) {}
 
-  private createRows(payments: PlannedPayment[]): PaymentRow[] {
-    let rows: PaymentRow[] = [];
+  private createRows(plannedPayments: PlannedPayment[]): PaymentRow[] {
+    const rows: PaymentRow[] = [];
 
-    for(let payment of payments) {
-      const costComponents: CostComponents = payment.costComponents.reduce((entities: { [id: string]: CostComponent }, costComponent: CostComponent) => {
-        return Object.assign(entities, {
-          [costComponent.chargeIdentifier]: costComponent
+    plannedPayments.forEach((plannedPayment, index) => {
+      const interest = this.getChargeAmount(plannedPayment.payment.costComponents, 'repay-interest');
+      const principal = this.getChargeAmount(plannedPayment.payment.costComponents, 'repay-principal');
+      const payment = plannedPayment.payment.balanceAdjustments.ey * -1;
+      const balance = plannedPayment.balances.clp;
+
+      if (index === 0) {
+        rows.push({
+          balance
         });
-      }, {});
+
+        return;
+      }
 
       rows.push({
-        date: payment.date,
-        interestRate: payment.interestRate,
-        remainingPrincipal: payment.remainingPrincipal,
-        costComponents
-      })
-    }
+        date: plannedPayment.payment.date,
+        payment,
+        interest,
+        principal,
+        balance
+      });
+    });
 
     return rows;
   }
+
+  private getChargeAmount(costComponents: CostComponent[], chargeIdentifier: string): number {
+    const foundComponent = costComponents.find(component => component.chargeIdentifier === chargeIdentifier);
+
+    if (foundComponent) {
+      return foundComponent.amount;
+    }
+
+    return 0;
+  };
 
   ngOnInit(): void {
     this.columns = this.casesStore.select(fromCases.getSearchCasePaymentPage)
@@ -93,7 +115,7 @@ export class CasePaymentsComponent implements OnInit, OnDestroy{
     this.caseSubscription.unsubscribe();
   }
 
-  fetchPayments(startDate?: string): void{
+  fetchPayments(startDate?: string): void {
     this.casesStore.dispatch({ type: SEARCH, payload: {
       productIdentifier: this.caseInstance.productIdentifier,
       caseIdentifier: this.caseInstance.identifier,

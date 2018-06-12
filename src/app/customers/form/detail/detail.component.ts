@@ -1,22 +1,24 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Component, Input} from '@angular/core';
 import {FormComponent} from '../../../common/forms/form.component';
-import {Validators, FormBuilder} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {FimsValidators} from '../../../common/validator/validators';
 
 export interface CustomerDetailFormData {
@@ -28,7 +30,7 @@ export interface CustomerDetailFormData {
     day?: number;
     month?: number;
     year?: number;
-  }
+  };
   member: boolean;
 }
 
@@ -46,18 +48,19 @@ export class CustomerDetailFormComponent extends FormComponent<CustomerDetailFor
       firstName: [formData.firstName, [Validators.required, Validators.maxLength(256)]],
       middleName: [formData.middleName, Validators.maxLength(256)],
       lastName: [formData.lastName, [Validators.required, Validators.maxLength(256)]],
-      dayOfBirth: [dateOfBirth ? this.formatDate(dateOfBirth.year, dateOfBirth.month, dateOfBirth.day) : undefined, Validators.required],
+      dayOfBirth: [dateOfBirth ? this.formatDate(dateOfBirth.year, dateOfBirth.month, dateOfBirth.day) : undefined,
+        [Validators.required, FimsValidators.beforeToday]],
       member: [formData.member],
-    })
+    });
   };
 
   @Input() editMode: boolean;
 
-  private formatDate(year: number, month: number, day: number): string{
+  private formatDate(year: number, month: number, day: number): string {
     return `${year}-${this.addZero(month)}-${this.addZero(day)}`;
   }
 
-  private addZero(value: number): string{
+  private addZero(value: number): string {
     return ('0' + value).slice(-2);
   }
 
@@ -81,7 +84,7 @@ export class CustomerDetailFormComponent extends FormComponent<CustomerDetailFor
         day: chunks.length ? Number(chunks[2]) : undefined,
       },
       member: this.form.get('member').value
-    }
+    };
   }
 
 }

@@ -1,17 +1,20 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -19,9 +22,11 @@ import {Customer} from '../../../services/customer/domain/customer.model';
 import {CustomerFormComponent} from '../form.component';
 import * as fromCustomers from '../../store';
 import {Error} from '../../../services/domain/error.model';
-import {Subscription} from 'rxjs';
+import {Subscription} from 'rxjs/Subscription';
 import {CustomersStore} from '../../store/index';
 import {CREATE, RESET_FORM} from '../../store/customer.actions';
+import {Catalog} from '../../../services/catalog/domain/catalog.model';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   templateUrl: './create.form.component.html'
@@ -49,7 +54,11 @@ export class CreateCustomerFormComponent implements OnInit, OnDestroy {
     customValues: []
   };
 
-  constructor(private router: Router, private route: ActivatedRoute, private store: CustomersStore) {}
+  catalog$: Observable<Catalog>;
+
+  constructor(private router: Router, private route: ActivatedRoute, private store: CustomersStore) {
+    this.catalog$ = store.select(fromCustomers.getCustomerCatalog);
+  }
 
   ngOnInit() {
     this.formStateSubscription = this.store.select(fromCustomers.getCustomerFormError)
@@ -60,7 +69,7 @@ export class CreateCustomerFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.formStateSubscription.unsubscribe();
 
-    this.store.dispatch({ type: RESET_FORM })
+    this.store.dispatch({ type: RESET_FORM });
   }
 
   onSave(customer: Customer) {

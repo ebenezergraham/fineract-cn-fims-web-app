@@ -1,30 +1,29 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Component, Input, OnInit} from '@angular/core';
 import {FormComponent} from '../forms/form.component';
-import {Validators, FormBuilder} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {Address} from '../../services/domain/address/address.model';
 import {Country} from '../../services/country/model/country.model';
 import {CountryService} from '../../services/country/country.service';
-import {SEARCH} from '../../store/country/country.actions';
 import {countryExists} from '../validator/country-exists.validator';
 import {Observable} from 'rxjs/Observable';
-import {Store} from '@ngrx/store';
-import * as fromRoot from '../../store/index'
 
 @Component({
   selector: 'fims-address-form',
@@ -37,7 +36,7 @@ export class AddressFormComponent extends FormComponent<Address> implements OnIn
   @Input() set formData(address: Address) {
     let country: Country;
 
-    if(address) {
+    if (address) {
       country = this.countryService.fetchByCountryCode(address.countryCode);
     }
 
@@ -50,19 +49,15 @@ export class AddressFormComponent extends FormComponent<Address> implements OnIn
     });
   };
 
-  constructor(private formBuilder: FormBuilder, private countryService: CountryService, private store: Store<fromRoot.State>) {
+  constructor(private formBuilder: FormBuilder, private countryService: CountryService) {
     super();
   }
 
   ngOnInit(): void {
-    this.filteredCountries = this.store.select(fromRoot.getSearchCountry);
-
-    this.form.get('country').valueChanges
+    this.filteredCountries = this.form.get('country').valueChanges
       .startWith(null)
       .map(country => country && typeof country === 'object' ? country.displayName : country)
-      .subscribe(searchTerm => this.store.dispatch({ type: SEARCH, payload: {
-        searchTerm
-      }}));
+      .map(searchTerm => this.countryService.fetchCountries(searchTerm));
   }
 
   get formData(): Address {
@@ -75,7 +70,7 @@ export class AddressFormComponent extends FormComponent<Address> implements OnIn
       region: this.form.get('region').value,
       country: country.name,
       countryCode: country.alpha2Code
-    }
+    };
   }
 
   countryDisplay(country: Country): string {

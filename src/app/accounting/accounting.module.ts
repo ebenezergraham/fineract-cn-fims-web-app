@@ -1,19 +1,21 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {FimsSharedModule} from '../common/common.module';
 import {AccountingRoutes} from './accounting.routing';
 import {RouterModule} from '@angular/router';
@@ -58,14 +60,16 @@ import {ChartOfAccountTableComponent} from './chartOfAccounts/chart-of-account-t
 import {SubLedgerListComponent} from './subLedger/sub-ledger.list.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {
-  MdAutocompleteModule,
-  MdButtonModule,
-  MdCheckboxModule,
-  MdIconModule,
-  MdInputModule,
-  MdListModule, MdOptionModule,
-  MdRadioModule,
-  MdToolbarModule
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatOptionModule,
+  MatRadioModule,
+  MatToolbarModule
 } from '@angular/material';
 import {CommonModule} from '@angular/common';
 import {CovalentDataTableModule, CovalentStepsModule} from '@covalent/core';
@@ -79,6 +83,18 @@ import {CreateTransactionTypeFormComponent} from './transactionTypes/form/create
 import {EditTransactionTypeFormComponent} from './transactionTypes/form/edit/edit.form.component';
 import {TransactionTypeExistsGuard} from './transactionTypes/transaction-type-exists.guard';
 import {TransactionTypeSelectComponent} from './journalEntries/form/transaction-type-select/transaction-type-select.component';
+import {ChequeApiEffects} from './store/cheques/effects/service.effects';
+import {ChequesListComponent} from './cheques/cheques.list.component';
+import {PayrollCollectionApiEffects} from './store/payroll/effects/service.effects';
+import {PayrollListComponent} from './payroll/payroll.list.component';
+import {CreatePayrollFormComponent} from './payroll/form/create.form.component';
+import {PayrollFormComponent} from './payroll/form/form.component';
+import {PayrollCollectionRouteEffects} from './store/payroll/effects/route.effects';
+import {PayrollCollectionNotificationEffects} from './store/payroll/effects/notification.effects';
+import {PaymentsListComponent} from './payroll/payments.list.component';
+import {CreateJournalEntryFormComponent} from './journalEntries/form/create.form.component';
+import {IncomeStatementComponent} from './incomeStatement/income-statement.component';
+import {FinancialConditionComponent} from './financialCondition/financial-condition.component';
 
 @NgModule({
   imports: [
@@ -88,15 +104,16 @@ import {TransactionTypeSelectComponent} from './journalEntries/form/transaction-
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MdIconModule,
-    MdListModule,
-    MdToolbarModule,
-    MdInputModule,
-    MdButtonModule,
-    MdRadioModule,
-    MdCheckboxModule,
-    MdAutocompleteModule,
-    MdOptionModule,
+    MatCardModule,
+    MatIconModule,
+    MatListModule,
+    MatToolbarModule,
+    MatInputModule,
+    MatButtonModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    MatAutocompleteModule,
+    MatOptionModule,
     CovalentDataTableModule,
     CovalentStepsModule,
 
@@ -119,6 +136,12 @@ import {TransactionTypeSelectComponent} from './journalEntries/form/transaction-
     EffectsModule.run(AccountCommandApiEffects),
     EffectsModule.run(AccountCommandRouteEffects),
     EffectsModule.run(AccountCommandNotificationEffects),
+
+    EffectsModule.run(ChequeApiEffects),
+
+    EffectsModule.run(PayrollCollectionApiEffects),
+    EffectsModule.run(PayrollCollectionRouteEffects),
+    EffectsModule.run(PayrollCollectionNotificationEffects)
   ],
   declarations: [
     GeneralLedgerComponent,
@@ -139,12 +162,20 @@ import {TransactionTypeSelectComponent} from './journalEntries/form/transaction-
     CreateAccountFormComponent,
     EditAccountFormComponent,
     JournalEntryListComponent,
+    CreateJournalEntryFormComponent,
     JournalEntryFormComponent,
     TransactionTypeListComponent,
     TransactionTypeFormComponent,
     CreateTransactionTypeFormComponent,
     EditTransactionTypeFormComponent,
-    TransactionTypeSelectComponent
+    TransactionTypeSelectComponent,
+    ChequesListComponent,
+    PayrollListComponent,
+    CreatePayrollFormComponent,
+    PayrollFormComponent,
+    PaymentsListComponent,
+    IncomeStatementComponent,
+    FinancialConditionComponent
   ],
   providers: [
     CommandsResolver,
@@ -154,4 +185,4 @@ import {TransactionTypeSelectComponent} from './journalEntries/form/transaction-
     { provide: AccountingStore, useFactory: accountingStoreFactory, deps: [Store]}
   ]
 })
-export class AccountingModule{}
+export class AccountingModule {}

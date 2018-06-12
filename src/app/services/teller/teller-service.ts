@@ -1,17 +1,20 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import {Inject, Injectable} from '@angular/core';
@@ -24,11 +27,13 @@ import {TellerAuthentication} from './domain/teller-authentication.model';
 import {RequestOptionsArgs, URLSearchParams} from '@angular/http';
 import {TellerTransactionCosts} from './domain/teller-transaction-costs.model';
 import {TellerTransaction} from './domain/teller-transaction.model';
+import {TellerDenomination} from './domain/teller-denomination.model';
 
 @Injectable()
 export class TellerService {
 
-  constructor(private http: HttpClient, @Inject('tellerBaseUrl') private baseUrl: string) {}
+  constructor(private http: HttpClient, @Inject('tellerBaseUrl') private baseUrl: string) {
+  }
 
   create(officeIdentifier: string, teller: Teller): Observable<void> {
     return this.http.post(`${this.baseUrl}/offices/${officeIdentifier}/teller`, teller);
@@ -73,7 +78,8 @@ export class TellerService {
     return this.http.post(`${this.baseUrl}/teller/${tellerCode}/transactions`, tellerTransaction);
   }
 
-  confirmTransaction(tellerCode: string, tellerTransactionIdentifier: string, command: string, chargesIncluded?: boolean): Observable<void> {
+  confirmTransaction(tellerCode: string, tellerTransactionIdentifier: string, command: string,
+                     chargesIncluded?: boolean): Observable<void> {
     const params = new URLSearchParams();
     params.append('command', command);
     params.append('charges', chargesIncluded ? 'included' : 'excluded');
@@ -87,6 +93,14 @@ export class TellerService {
 
   getTransactions(tellerCode: string): Observable<TellerTransaction[]> {
     return this.http.get(`${this.baseUrl}/teller/${tellerCode}/transactions`);
+  }
+
+  saveTellerDenomination(officeIdentifier: string, tellerCode: string, tellerDenomination: TellerDenomination): Observable<void> {
+    return this.http.post(`${this.baseUrl}/offices/${officeIdentifier}/teller/${tellerCode}/denominations`, tellerDenomination);
+  }
+
+  fetchTellerDenominations(officeIdentifier: string, tellerCode: string): Observable<TellerDenomination[]> {
+    return this.http.get(`${this.baseUrl}/offices/${officeIdentifier}/teller/${tellerCode}/denominations`);
   }
 
 }

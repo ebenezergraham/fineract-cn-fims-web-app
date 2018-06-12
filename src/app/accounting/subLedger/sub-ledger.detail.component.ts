@@ -1,28 +1,32 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-import {OnInit, Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Ledger} from '../../services/accounting/domain/ledger.model';
 import {TableData, TableFetchRequest} from '../../common/data-table/data-table.component';
-import {Observable, Subscription} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
+import {Subscription} from 'rxjs/Subscription';
 import {TdDialogService} from '@covalent/core';
 import {TranslateService} from '@ngx-translate/core';
 import * as fromAccounting from '../store';
 import * as fromRoot from '../../store';
-import {SelectAction, DELETE} from '../store/ledger/ledger.actions';
+import {DELETE} from '../store/ledger/ledger.actions';
 import {AccountingStore} from '../store/index';
 import {SEARCH_BY_LEDGER} from '../../store/account/account.actions';
 import {FetchRequest} from '../../services/domain/paging/fetch-request.model';
@@ -31,7 +35,7 @@ import {Account} from '../../services/accounting/domain/account.model';
 @Component({
   templateUrl: './sub-ledger.detail.component.html'
 })
-export class SubLedgerDetailComponent implements OnInit, OnDestroy{
+export class SubLedgerDetailComponent implements OnInit, OnDestroy {
 
   private ledgerSubscription: Subscription;
 
@@ -50,7 +54,8 @@ export class SubLedgerDetailComponent implements OnInit, OnDestroy{
     { name: 'balance', label: 'Balance' }
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private dialogService: TdDialogService, private translate: TranslateService, private store: AccountingStore){}
+  constructor(private router: Router, private route: ActivatedRoute, private dialogService: TdDialogService,
+              private translate: TranslateService, private store: AccountingStore) {}
 
   ngOnInit(): void {
     this.ledgerSubscription = this.store.select(fromAccounting.getSelectedLedger)
@@ -74,14 +79,14 @@ export class SubLedgerDetailComponent implements OnInit, OnDestroy{
     this.ledgerSubscription.unsubscribe();
   }
 
-  rowSelect(account: Account): void{
+  rowSelect(account: Account): void {
     this.router.navigate(['../../../../accounts/detail', account.identifier], { relativeTo: this.route });
   }
 
-  confirmDeletion(): Observable<boolean>{
-    let message = 'Do you want to delete this ledger?';
-    let title = 'Confirm deletion';
-    let button = 'DELETE LEDGER';
+  confirmDeletion(): Observable<boolean> {
+    const message = 'Do you want to delete this ledger?';
+    const title = 'Confirm deletion';
+    const button = 'DELETE LEDGER';
 
     return this.translate.get([title, message, button])
       .flatMap(result =>
@@ -100,12 +105,12 @@ export class SubLedgerDetailComponent implements OnInit, OnDestroy{
         this.store.dispatch({ type: DELETE, payload: {
           ledger: this.ledger,
           activatedRoute: this.route
-        }})
+        }});
       });
   }
 
-  fetchAccounts(fetchRequest?: TableFetchRequest): void{
-    if(fetchRequest){
+  fetchAccounts(fetchRequest?: TableFetchRequest): void {
+    if (fetchRequest) {
       this.lastFetchRequest = fetchRequest;
     }
 

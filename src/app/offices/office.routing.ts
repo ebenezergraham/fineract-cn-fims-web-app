@@ -1,17 +1,20 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import {Routes} from '@angular/router';
 import {OfficeComponent} from './office.component';
@@ -29,8 +32,9 @@ import {EditOfficeTellerFormComponent} from './detail/teller/form/edit.form.comp
 import {CreateOfficeTellerFormComponent} from './detail/teller/form/create.form.component';
 import {OfficeTellerDetailComponent} from './detail/teller/detail/teller.detail.component';
 import {TellerBalanceComponent} from './detail/teller/detail/balance/balance.component';
-import {CloseOfficeTellerFormComponent} from './detail/teller/detail/command/close.component';
 import {OfficeTellerCommandComponent} from './detail/teller/detail/command/command.component';
+import {TellerDenominationListComponent} from './detail/teller/detail/denomination/denomination.list.component';
+import {CreateDenominationFormComponent} from './detail/teller/detail/denomination/form/create.form.component';
 
 export const OfficeRoutes: Routes = [
   {
@@ -95,7 +99,22 @@ export const OfficeRoutes: Routes = [
             path: 'balance',
             component: TellerBalanceComponent,
             data: { title: 'View balance'}
-          }
+          },
+          {
+            path: 'denominations',
+            children: [
+              {
+                path: '',
+                component: TellerDenominationListComponent,
+                data: { title: 'View denominations'}
+              },
+              {
+                path: 'create',
+                component: CreateDenominationFormComponent,
+                data: { title: 'Create denomination'}
+              }
+            ]
+          },
         ]
       },
       {

@@ -1,19 +1,21 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {Ledger} from '../../services/accounting/domain/ledger.model';
@@ -29,7 +31,7 @@ import {TdDialogService} from '@covalent/core';
 @Component({
   templateUrl: './sub-ledger.list.component.html'
 })
-export class SubLedgerListComponent implements OnInit, OnDestroy{
+export class SubLedgerListComponent implements OnInit, OnDestroy {
 
   private selectionSubscription: Subscription;
 
@@ -44,10 +46,12 @@ export class SubLedgerListComponent implements OnInit, OnDestroy{
   columns: any[] = [
     { name: 'identifier', label: 'Id' },
     { name: 'name', label: 'Name' },
-    { name: 'description', label: 'Description' }
+    { name: 'description', label: 'Description' },
+    { name: 'totalValue', label: 'Balance', format: value => value ? value.toFixed(2) : '-' }
   ];
 
-  constructor(private route: ActivatedRoute, private router: Router, private store: AccountingStore, private translate: TranslateService, private dialogService: TdDialogService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private store: AccountingStore, private translate: TranslateService,
+              private dialogService: TdDialogService) {}
 
   ngOnInit(): void {
     this.selectionSubscription = this.store.select(fromAccounting.getSelectedLedger)
@@ -66,7 +70,7 @@ export class SubLedgerListComponent implements OnInit, OnDestroy{
   set ledger(ledger: Ledger) {
     this._ledger = ledger;
 
-    if(ledger.subLedgers) {
+    if (ledger.subLedgers) {
       this.ledgerData.data = ledger.subLedgers;
       this.ledgerData.totalElements = ledger.subLedgers.length;
     }
@@ -76,10 +80,10 @@ export class SubLedgerListComponent implements OnInit, OnDestroy{
     return this._ledger;
   }
 
-  confirmDeletion(): Observable<boolean>{
-    let message = 'Do you want to delete this ledger?';
-    let title = 'Confirm deletion';
-    let button = 'DELETE LEDGER';
+  confirmDeletion(): Observable<boolean> {
+    const message = 'Do you want to delete this ledger?';
+    const title = 'Confirm deletion';
+    const button = 'DELETE LEDGER';
 
     return this.translate.get([title, message, button])
       .flatMap(result =>
@@ -98,7 +102,7 @@ export class SubLedgerListComponent implements OnInit, OnDestroy{
         this.store.dispatch({ type: DELETE, payload: {
           ledger: this.ledger,
           activatedRoute: this.route
-        }})
+        }});
       });
   }
 

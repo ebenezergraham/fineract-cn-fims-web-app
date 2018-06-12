@@ -1,27 +1,31 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import {Component, ViewChild} from '@angular/core';
 import {ContactDetail} from '../../../services/domain/contact/contact-detail.model';
 import {CustomerContactFormComponent} from './contact.component';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ReactiveFormsModule} from '@angular/forms';
-import {MdInputModule} from '@angular/material';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {setValueByFormControlName} from '../../../common/testing/input-fields';
+import {setValueByCssSelector} from '../../../common/testing/input-fields';
 import {TranslateModule} from '@ngx-translate/core';
+import {FimsSharedModule} from '../../../common/common.module';
+import {MatInputModule} from '@angular/material';
 
 const contactDetails: ContactDetail[] = [
   { group: 'BUSINESS', type: 'EMAIL', value: 'test@test.de', preferenceLevel: 1 },
@@ -29,7 +33,7 @@ const contactDetails: ContactDetail[] = [
   { group: 'BUSINESS', type: 'MOBILE', value: '5678', preferenceLevel: 1 }
 ];
 
-describe('Test customer form', () => {
+describe('Test contact form', () => {
 
   let fixture: ComponentFixture<TestComponent>;
 
@@ -43,8 +47,9 @@ describe('Test customer form', () => {
       ],
       imports: [
         TranslateModule.forRoot(),
+        FimsSharedModule,
         ReactiveFormsModule,
-        MdInputModule,
+        MatInputModule,
         NoopAnimationsModule
       ]
     });
@@ -56,8 +61,8 @@ describe('Test customer form', () => {
   it('component should collect only contact fields with values', () => {
     fixture.detectChanges();
 
-    setValueByFormControlName(fixture, 'email', '');
-    setValueByFormControlName(fixture, 'phone', '5678');
+    setValueByCssSelector(fixture, '#email', '');
+    setValueByCssSelector(fixture, '#phone', '5678');
 
     fixture.detectChanges();
 

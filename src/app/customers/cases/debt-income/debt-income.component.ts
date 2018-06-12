@@ -1,19 +1,21 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Component, OnInit} from '@angular/core';
 import * as fromCases from '../store/index';
 import {CasesStore} from '../store/index';
@@ -26,11 +28,11 @@ import {TableData} from '../../../common/data-table/data-table.component';
 import {FimsCase} from '../../../services/portfolio/domain/fims-case.model';
 
 interface IncomeDebtOverview {
-  debtTableData: TableData,
-  incomeTableData: TableData,
-  ratio: number,
-  debtTotal: number,
-  incomeTotal: number
+  debtTableData: TableData;
+  incomeTableData: TableData;
+  ratio: number;
+  debtTotal: number;
+  incomeTotal: number;
 }
 
 @Component({
@@ -38,7 +40,7 @@ interface IncomeDebtOverview {
 })
 export class CaseDebtIncomeComponent implements OnInit {
 
-  numberFormat: string = '2.2-2';
+  numberFormat = '2.2-2';
 
   columns: any[] = [
     { name: 'description', label: 'Description' },
@@ -79,7 +81,7 @@ export class CaseDebtIncomeComponent implements OnInit {
       incomeSources: [],
       debts: [],
       assets: []
-    }
+    };
   }
 
   private mapToOverview(snapshot: CreditWorthinessSnapshot): IncomeDebtOverview {
@@ -92,7 +94,7 @@ export class CaseDebtIncomeComponent implements OnInit {
       debtTotal,
       incomeTotal,
       ratio
-    }
+    };
   }
 
   mapToTableData(data: CreditWorthinessFactor[]): TableData {
@@ -100,7 +102,7 @@ export class CaseDebtIncomeComponent implements OnInit {
       data,
       totalPages: 1,
       totalElements: data.length
-    }
+    };
   }
 
   divideIfNotZero(numerator, denominator): number {
@@ -112,7 +114,7 @@ export class CaseDebtIncomeComponent implements OnInit {
   }
 
   sum(factors: CreditWorthinessFactor[]): number {
-    return factors.reduce((acc, val) => acc + val.amount, 0);
+    return factors.reduce((acc, val) => acc + parseFloat(val.amount), 0);
   }
 
 }

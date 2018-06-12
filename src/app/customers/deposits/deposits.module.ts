@@ -1,19 +1,21 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {RouterModule} from '@angular/router';
 import {NgModule} from '@angular/core';
 import {FimsSharedModule} from '../../common/common.module';
@@ -21,15 +23,15 @@ import {TranslateModule} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import {
-  MdButtonModule,
-  MdCardModule,
-  MdIconModule,
-  MdInputModule,
-  MdListModule,
-  MdOptionModule,
-  MdRadioModule,
-  MdSelectModule,
-  MdToolbarModule
+  MatButtonModule,
+  MatCardModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatOptionModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatToolbarModule
 } from '@angular/material';
 import {CovalentChipsModule, CovalentCommonModule, CovalentStepsModule} from '@covalent/core';
 import {DepositCreateComponent} from './form/create.component';
@@ -46,6 +48,8 @@ import {DepositIndexComponent} from './detail/deposit.index.component';
 import {DepositDetailComponent} from './detail/deposit.detail.component';
 import {DepositInstanceExistsGuard} from './deposit-instance-exists.guard';
 import {DepositEditComponent} from './form/edit.component';
+import {IssueChequesFormComponent} from './detail/cheques/form.component';
+import {IssueChequeComponent} from './detail/cheques/cheques.component';
 
 @NgModule({
   imports: [
@@ -54,15 +58,15 @@ import {DepositEditComponent} from './form/edit.component';
     TranslateModule,
     CommonModule,
     ReactiveFormsModule,
-    MdIconModule,
-    MdListModule,
-    MdToolbarModule,
-    MdInputModule,
-    MdButtonModule,
-    MdOptionModule,
-    MdSelectModule,
-    MdRadioModule,
-    MdCardModule,
+    MatIconModule,
+    MatListModule,
+    MatToolbarModule,
+    MatInputModule,
+    MatButtonModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatCardModule,
     CovalentCommonModule,
     CovalentStepsModule,
     CovalentChipsModule,
@@ -77,7 +81,9 @@ import {DepositEditComponent} from './form/edit.component';
     DepositIndexComponent,
     DepositCreateComponent,
     DepositEditComponent,
-    DepositDetailComponent
+    DepositDetailComponent,
+    IssueChequeComponent,
+    IssueChequesFormComponent,
   ],
   providers: [
     DepositInstanceExistsGuard,

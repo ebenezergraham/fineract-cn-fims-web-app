@@ -1,23 +1,24 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import * as ledger from './ledger.actions';
-import { createSelector } from 'reselect';
+import {createSelector} from 'reselect';
 import {Ledger} from '../../../services/accounting/domain/ledger.model';
-import {ResourceState} from '../../../common/store/resource.reducer';
 import {resourcesToHash} from '../../../common/store/reducer.helper';
 
 export interface State {
@@ -98,7 +99,7 @@ export function reducer(state = initialState, action: ledger.Actions): State {
         }),
         selectedLedgerId: state.selectedLedgerId,
         loadedAt: state.loadedAt
-      }
+      };
     }
 
     case ledger.UPDATE_SUCCESS: {
@@ -112,7 +113,7 @@ export function reducer(state = initialState, action: ledger.Actions): State {
         }),
         selectedLedgerId: state.selectedLedgerId,
         loadedAt: state.loadedAt
-      }
+      };
     }
 
     case ledger.CREATE_SUB_LEDGER_SUCCESS: {
@@ -131,7 +132,7 @@ export function reducer(state = initialState, action: ledger.Actions): State {
         }),
         selectedLedgerId: state.selectedLedgerId,
         loadedAt: state.loadedAt
-      }
+      };
     }
 
     case ledger.DELETE_SUCCESS: {
@@ -144,10 +145,10 @@ export function reducer(state = initialState, action: ledger.Actions): State {
         let ledger = state.entities[id];
 
         // Remove sub ledger from parent ledger
-        if(ledger.identifier === deletedLedger.parentLedgerIdentifier) {
+        if (ledger.identifier === deletedLedger.parentLedgerIdentifier) {
           ledger = Object.assign({}, ledger, {
-            subLedgers: ledger.subLedgers.filter(ledger => ledger.identifier !== deletedLedger.identifier)
-          })
+            subLedgers: ledger.subLedgers.filter(subLedger => subLedger.identifier !== deletedLedger.identifier)
+          });
         }
 
         return Object.assign(entities, {
@@ -168,7 +169,7 @@ export function reducer(state = initialState, action: ledger.Actions): State {
         entities: newEntities,
         loadedAt: newLoadedAt,
         selectedLedgerId: state.selectedLedgerId
-      }
+      };
     }
 
     default: {

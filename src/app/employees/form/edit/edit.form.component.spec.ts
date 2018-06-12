@@ -1,48 +1,46 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
 import {TranslateModule} from '@ngx-translate/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {CovalentStepsModule} from '@covalent/core';
 import {EditEmployeeFormComponent} from './edit.form.component';
 import {EmployeeFormComponent} from '../form.component';
-import {SelectListComponent} from '../../../common/select-list/select-list.component';
-import {IdInputComponent} from '../../../common/id-input/id-input.component';
 import {ActivatedRoute, Router} from '@angular/router';
-import {LayoutCardOverComponent} from '../../../common/layout-card-over/layout-card-over.component';
 import {User} from '../../../services/identity/domain/user.model';
 import {Employee} from '../../../services/office/domain/employee.model';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 import {EmployeesStore} from '../../store/index';
 import {Store} from '@ngrx/store';
 import {UPDATE} from '../../store/employee.actions';
 import * as fromEmployees from '../../store';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {FormFinalActionComponent} from '../../../common/forms/form-final-action.component';
-import {FormContinueActionComponent} from '../../../common/forms/form-continue-action.component';
-import {MdCardModule, MdInputModule, MdOptionModule, MdSelectModule} from '@angular/material';
+import {MatCardModule, MatInputModule, MatOptionModule, MatSelectModule} from '@angular/material';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {FimsSharedModule} from '../../../common/common.module';
 
-let userMock: User = {
+const userMock: User = {
   identifier: 'test',
   role: 'test'
 };
 
-let employeeMock: Employee = {
+const employeeMock: Employee = {
   identifier: 'test',
   assignedOffice: 'test',
   givenName: 'test',
@@ -58,7 +56,7 @@ let employeeMock: Employee = {
   ]
 };
 
-let activatedRoute = {
+const activatedRoute = {
   data: Observable.of({
     user: userMock
   })
@@ -76,20 +74,17 @@ describe('Test employee form component', () => {
 
     TestBed.configureTestingModule({
       declarations: [
-        IdInputComponent,
-        FormContinueActionComponent,
-        FormFinalActionComponent,
-        SelectListComponent,
         EmployeeFormComponent,
         EditEmployeeFormComponent,
       ],
       imports: [
         TranslateModule.forRoot(),
+        FimsSharedModule,
         ReactiveFormsModule,
-        MdInputModule,
-        MdCardModule,
-        MdSelectModule,
-        MdOptionModule,
+        MatInputModule,
+        MatCardModule,
+        MatSelectModule,
+        MatOptionModule,
         CovalentStepsModule,
         NoopAnimationsModule
       ],
@@ -99,17 +94,19 @@ describe('Test employee form component', () => {
         {
           provide: Store, useClass: class {
             dispatch = jasmine.createSpy('dispatch');
-            select = jasmine.createSpy('select').and.returnValue(Observable.empty())
+            select = jasmine.createSpy('select').and.returnValue(Observable.empty());
           }
         },
         {
           provide: EmployeesStore, useClass: class {
             dispatch = jasmine.createSpy('dispatch');
             select = jasmine.createSpy('select').and.callFake(selector => {
-              if(selector === fromEmployees.getSelectedEmployee) return Observable.of(employeeMock);
+              if (selector === fromEmployees.getSelectedEmployee) {
+                return Observable.of(employeeMock);
+              }
 
               return Observable.empty();
-            })
+            });
           }
         }
       ],
@@ -137,7 +134,7 @@ describe('Test employee form component', () => {
         password: 'newPassword',
         activatedRoute: activatedRoute
       }});
-    })
+    });
 
   })));
 });

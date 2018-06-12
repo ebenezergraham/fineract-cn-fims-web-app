@@ -1,19 +1,21 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {NgModule} from '@angular/core';
 import {FimsSharedModule} from '../../common/common.module';
 import {ProductRoutes} from './product.routes';
@@ -57,18 +59,37 @@ import {TranslateModule} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import {
-  MdButtonModule, MdCheckboxModule,
-  MdIconModule,
-  MdInputModule,
-  MdListModule,
-  MdOptionModule,
-  MdRadioModule, MdSelectModule,
-  MdSlideToggleModule,
-  MdToolbarModule
+  MatButtonModule,
+  MatCheckboxModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatOptionModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatSlideToggleModule,
+  MatToolbarModule
 } from '@angular/material';
-import {CovalentMessageModule, CovalentStepsModule} from '@covalent/core';
+import {CovalentDataTableModule, CovalentMessageModule, CovalentStepsModule} from '@covalent/core';
 import {ProductIndexComponent} from './product.index.component';
-import {TextMaskModule} from 'angular2-text-mask';
+import {ProductDetailFormComponent} from './form/detail/detail.component';
+import {ProductChargeRangeListComponent} from './charges/ranges/range.list.component';
+import {ProductChargeRangeDetailComponent} from './charges/ranges/range.detail.component';
+import {ProductChargeRangeFormComponent} from './charges/ranges/form/form.component';
+import {EditProductChargeRangeFormComponent} from './charges/ranges/form/edit.component';
+import {CreateProductChargeRangeFormComponent} from './charges/ranges/form/create.component';
+import {ProductChargeRangesRouteEffects} from './store/ranges/effects/route.effects';
+import {ProductChargeRangesApiEffects} from './store/ranges/effects/service.effects';
+import {ProductChargeRangeExistsGuard} from './charges/ranges/range-exists.guard';
+import {ProductChargeRangeIndexComponent} from './charges/ranges/range.index.component';
+import {ProductChargeRangesNotificationEffects} from './store/ranges/effects/notification.effects';
+import {ProductLossProvisionApiEffects} from './store/lossProvision/effects/service.effects';
+import {ProductLossProvisionRouteEffects} from './store/lossProvision/effects/route.effects';
+import {ProductLossProvisionNotificationEffects} from './store/lossProvision/effects/notification.effects';
+import {LoanLossProvisionExistsGuard} from './lossProvision/loss-provision-exists.guard';
+import {CreateProductLossProvisionFormComponent} from './lossProvision/form/create.component';
+import {ProductLossProvisionFormComponent} from './lossProvision/form/form.component';
+import {LossProvisionDetailComponent} from './lossProvision/loss-provision.detail.component';
 
 @NgModule({
   imports: [
@@ -77,16 +98,17 @@ import {TextMaskModule} from 'angular2-text-mask';
     TranslateModule,
     CommonModule,
     ReactiveFormsModule,
-    MdIconModule,
-    MdListModule,
-    MdToolbarModule,
-    MdInputModule,
-    MdButtonModule,
-    MdSlideToggleModule,
-    MdRadioModule,
-    MdOptionModule,
-    MdSelectModule,
-    MdCheckboxModule,
+    MatIconModule,
+    MatListModule,
+    MatToolbarModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSlideToggleModule,
+    MatRadioModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    CovalentDataTableModule,
     CovalentStepsModule,
     CovalentMessageModule,
 
@@ -101,6 +123,14 @@ import {TextMaskModule} from 'angular2-text-mask';
     EffectsModule.run(ProductChargesApiEffects),
     EffectsModule.run(ProductChargesRouteEffects),
     EffectsModule.run(ProductChargesNotificationEffects),
+
+    EffectsModule.run(ProductChargeRangesApiEffects),
+    EffectsModule.run(ProductChargeRangesRouteEffects),
+    EffectsModule.run(ProductChargeRangesNotificationEffects),
+
+    EffectsModule.run(ProductLossProvisionApiEffects),
+    EffectsModule.run(ProductLossProvisionRouteEffects),
+    EffectsModule.run(ProductLossProvisionNotificationEffects),
   ],
   declarations: [
     // product
@@ -110,6 +140,7 @@ import {TextMaskModule} from 'angular2-text-mask';
     ProductFormComponent,
     ProductCreateComponent,
     ProductEditComponent,
+    ProductDetailFormComponent,
     ProductFeeFormComponent,
     ProductInterestFormComponent,
     ProductTermFormComponent,
@@ -123,6 +154,14 @@ import {TextMaskModule} from 'angular2-text-mask';
     ProductChargeCreateFormComponent,
     ProductChargeEditFormComponent,
 
+    // ranges
+    ProductChargeRangeListComponent,
+    ProductChargeRangeIndexComponent,
+    ProductChargeRangeDetailComponent,
+    ProductChargeRangeFormComponent,
+    CreateProductChargeRangeFormComponent,
+    EditProductChargeRangeFormComponent,
+
     // status
     ProductStatusComponent,
     ProductTaskFormComponent,
@@ -130,12 +169,19 @@ import {TextMaskModule} from 'angular2-text-mask';
     ProductStatusEditFormComponent,
     ProductStatusDetailComponent,
 
+    // Loss provision
+    LossProvisionDetailComponent,
+    ProductLossProvisionFormComponent,
+    CreateProductLossProvisionFormComponent,
+    ProductChargeDetailComponent
   ],
   providers: [
     ProductExistsGuard,
     ProductTaskExistsGuard,
     ProductChargeExistsGuard,
+    ProductChargeRangeExistsGuard,
+    LoanLossProvisionExistsGuard,
     { provide: PortfolioStore, useFactory: portfolioStoreFactory, deps: [Store]}
   ]
 })
-export class ProductModule{}
+export class ProductModule {}

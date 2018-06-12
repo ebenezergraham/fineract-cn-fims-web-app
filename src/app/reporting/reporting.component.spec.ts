@@ -1,35 +1,36 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
-import {ComponentFixture, inject, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReportingComponent} from './reporting.component';
 import {TranslateModule} from '@ngx-translate/core';
-import {MdCardModule, MdListModule, MdToolbarModule} from '@angular/material';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {ActivatedRoute, Router, RouterModule} from '@angular/router';
-import createSpyObj = jasmine.createSpyObj;
+import {ActivatedRoute, Router} from '@angular/router';
 import {ReportingService} from '../services/reporting/reporting.service';
 import {Observable} from 'rxjs/Observable';
 import {By} from '@angular/platform-browser';
 import {FimsSharedModule} from '../common/common.module';
 import {RouterLinkStubDirective, RouterOutletStubComponent} from '../common/testing/router-stubs';
+import {MatListModule, MatToolbarModule} from '@angular/material';
 
 describe('Test reporting component', () => {
 
-  let activatedRoute: ActivatedRoute;
+  const activatedRoute: ActivatedRoute = undefined;
 
   let fixture: ComponentFixture<ReportingComponent>;
 
@@ -45,8 +46,8 @@ describe('Test reporting component', () => {
       imports: [
         TranslateModule.forRoot(),
         FimsSharedModule,
-        MdListModule,
-        MdToolbarModule,
+        MatListModule,
+        MatToolbarModule,
         NoopAnimationsModule
       ],
       providers: [
@@ -65,14 +66,14 @@ describe('Test reporting component', () => {
     fixture.detectChanges();
   });
 
-  it('should render md-list-items on the page', () => {
-    const listItems = fixture.debugElement.queryAll(By.css('a[md-list-item]'));
+  it('should render mat-list-items on the page', () => {
+    const listItems = fixture.debugElement.queryAll(By.css('a[mat-list-item]'));
 
     expect(listItems.length).toBe(2);
   });
 
   it('should navigate to report definitions page', () => {
-    const listItems = fixture.debugElement.queryAll(By.css('a[md-list-item]'));
+    const listItems = fixture.debugElement.queryAll(By.css('a[mat-list-item]'));
 
     listItems[0].nativeElement.click();
 
@@ -85,6 +86,6 @@ describe('Test reporting component', () => {
       .map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
 
     expect(links[0].navigatedTo).toEqual(['categories', 'categoryOne']);
-  })
+  });
 
 });

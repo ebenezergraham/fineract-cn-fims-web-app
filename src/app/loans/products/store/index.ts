@@ -1,19 +1,21 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import * as fromRoot from '../../../store';
 import {ActionReducer, Store} from '@ngrx/store';
 import {createSelector} from 'reselect';
@@ -21,6 +23,10 @@ import {createReducer} from '../../../store/index';
 import * as fromProducts from './products.reducer';
 import * as fromProductTasks from './tasks/tasks.reducer';
 import * as fromProductCharges from './charges/charges.reducer';
+import * as fromProductChargeRanges from './ranges/ranges.reducer';
+import * as fromProductLossProvision from './lossProvision/loss-provision.reducer';
+import {getLossProvisionConfiguration, getLossProvisionConfigurationLoadedAt} from './lossProvision/loss-provision.reducer';
+
 import {
   createResourceReducer,
   getResourceAll,
@@ -45,6 +51,8 @@ export interface State extends fromRoot.State {
   productTaskForm: FormState;
   productCharges: ResourceState;
   productChargeForm: FormState;
+  productChargeRanges: ResourceState;
+  productLossProvision: fromProductLossProvision.State;
 }
 
 const reducers = {
@@ -54,7 +62,9 @@ const reducers = {
   productTasks: createResourceReducer('Product Task', fromProductTasks.reducer),
   productTaskForm: createFormReducer('Product Task'),
   productCharges: createResourceReducer('Product Charge', fromProductCharges.reducer),
-  productChargeForm: createFormReducer('Product Charge')
+  productChargeForm: createFormReducer('Product Charge'),
+  productChargeRanges: createResourceReducer('Product Charge Range', fromProductChargeRanges.reducer),
+  productLossProvision: fromProductLossProvision.reducer
 };
 
 export const portfolioModuleReducer: ActionReducer<State> = createReducer(reducers);
@@ -86,7 +96,8 @@ export const getSearchProducts = createSelector(getProductSearchState, getSearch
 export const getProductSearchTotalElements = createSelector(getProductSearchState, getSearchTotalElements);
 export const getProductSearchTotalPages = createSelector(getProductSearchState, getSearchTotalPages);
 
-export const getProductSearchResults = createSelector(getSearchProducts, getProductSearchTotalPages, getProductSearchTotalElements, (products, totalPages, totalElements) => {
+export const getProductSearchResults = createSelector(getSearchProducts, getProductSearchTotalPages, getProductSearchTotalElements,
+  (products, totalPages, totalElements) => {
   return {
     products: products,
     totalPages: totalPages,
@@ -116,3 +127,25 @@ export const getProductChargesLoadedAt = createSelector(getProductChargesState, 
 export const getSelectedProductCharge = createSelector(getProductChargesState, getResourceSelected);
 
 export const getAllProductChargeEntities = createSelector(getProductChargesState, getResourceAll);
+
+/**
+ * Product Charge Range Selectors
+ */
+
+export const getProductChargeRangesState = (state: State) => state.productChargeRanges;
+
+export const getProductChargeRangesLoadedAt = createSelector(getProductChargeRangesState, getResourceLoadedAt);
+export const getSelectedProductChargeRange = createSelector(getProductChargeRangesState, getResourceSelected);
+
+export const getAllProductChargeRangeEntities = createSelector(getProductChargeRangesState, getResourceAll);
+
+/**
+ * Product Loss Configuration Selectors
+ */
+
+export const getProductLossProvisionState = (state: State) => state.productLossProvision;
+
+export const getProductLossProvisionConfigurationLoadedAt = createSelector(
+  getProductLossProvisionState, getLossProvisionConfigurationLoadedAt
+);
+export const getProductLossProvisionConfiguration = createSelector(getProductLossProvisionState, getLossProvisionConfiguration);

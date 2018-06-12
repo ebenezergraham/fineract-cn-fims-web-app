@@ -1,19 +1,21 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {OfficeFormComponent} from '../form.component';
@@ -21,13 +23,13 @@ import {Office} from '../../../services/office/domain/office.model';
 import * as fromOffice from '../../store';
 import {CREATE, CREATE_BRANCH, RESET_FORM} from '../../store/office.actions';
 import {Error} from '../../../services/domain/error.model';
-import {Subscription} from 'rxjs';
+import {Subscription} from 'rxjs/Subscription';
 import {OfficesStore} from '../../store/index';
 
 @Component({
   templateUrl: './create.form.component.html'
 })
-export class CreateOfficeFormComponent implements OnInit, OnDestroy{
+export class CreateOfficeFormComponent implements OnInit, OnDestroy {
 
   private formStateSubscription: Subscription;
 
@@ -42,8 +44,8 @@ export class CreateOfficeFormComponent implements OnInit, OnDestroy{
     this.formStateSubscription = store.select(fromOffice.getOfficeFormError)
       .filter((error: Error) => !!error)
       .subscribe((error: Error) => {
-        let officeDetailForm = this.formComponent.detailForm;
-        let errors = officeDetailForm.get('identifier').errors || {};
+        const officeDetailForm = this.formComponent.detailForm;
+        const errors = officeDetailForm.get('identifier').errors || {};
         errors['unique'] = true;
         officeDetailForm.get('identifier').setErrors(errors);
         this.formComponent.step.open();
@@ -59,17 +61,17 @@ export class CreateOfficeFormComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
     this.formStateSubscription.unsubscribe();
 
-    this.store.dispatch({ type: RESET_FORM })
+    this.store.dispatch({ type: RESET_FORM });
   }
 
-  onSave(office: Office): void{
-    if(this.parentIdentifier){
+  onSave(office: Office): void {
+    if (this.parentIdentifier) {
       office.parentIdentifier = this.parentIdentifier;
       this.store.dispatch({ type: CREATE_BRANCH, payload: {
         office,
         activatedRoute: this.route
       }});
-    }else{
+    } else {
       this.store.dispatch({ type: CREATE, payload: {
         office,
         activatedRoute: this.route
@@ -77,14 +79,14 @@ export class CreateOfficeFormComponent implements OnInit, OnDestroy{
     }
   }
 
-  onCancel(): void{
-    this.navigateAway()
+  onCancel(): void {
+    this.navigateAway();
   }
 
-  navigateAway(): void{
-    if(this.parentIdentifier){
+  navigateAway(): void {
+    if (this.parentIdentifier) {
       this.router.navigate(['../detail', this.parentIdentifier ], { relativeTo: this.route });
-    }else{
+    } else {
       this.router.navigate(['../'], { relativeTo: this.route });
     }
   }

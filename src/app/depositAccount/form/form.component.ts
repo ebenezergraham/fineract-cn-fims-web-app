@@ -1,23 +1,22 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
-import {
-  Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {ProductDefinition} from '../../services/depositAccount/domain/definition/product-definition.model';
 import {TdStepComponent} from '@covalent/core';
 import {AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
@@ -139,8 +138,8 @@ export class DepositProductFormComponent implements OnInit, OnDestroy, OnChanges
     const termPeriodControl: FormControl = this.formGroup.get('termPeriod') as FormControl;
     const termTimeUnitControl: FormControl = this.formGroup.get('termTimeUnit') as FormControl;
 
-    if(enabled) {
-      this.enable(termPeriodControl, [Validators.required, FimsValidators.minValue(1)]);
+    if (enabled) {
+      this.enable(termPeriodControl, [Validators.required, FimsValidators.minValue(1), FimsValidators.maxScale(0)]);
       this.enable(termTimeUnitControl, [Validators.required]);
     } else {
       this.disable(termPeriodControl);
@@ -153,7 +152,7 @@ export class DepositProductFormComponent implements OnInit, OnDestroy, OnChanges
 
     const accrueAccountControl: FormControl = this.formGroup.get('accrueAccountIdentifier') as FormControl;
 
-    if(enableAccrueAccount) {
+    if (enableAccrueAccount) {
       this.enable(accrueAccountControl, [Validators.required], accountExists(this.accountingService));
     } else {
       this.disable(accrueAccountControl);
@@ -178,7 +177,7 @@ export class DepositProductFormComponent implements OnInit, OnDestroy, OnChanges
   }
 
   save(): void {
-    const currency = this.currencies.find(currency => currency.code === this.formGroup.get('currencyCode').value);
+    const foundCurrency = this.currencies.find(currency => currency.code === this.formGroup.get('currencyCode').value);
 
     const isShare = this.formGroup.get('type').value === 'SHARE';
 
@@ -198,10 +197,10 @@ export class DepositProductFormComponent implements OnInit, OnDestroy, OnChanges
         interestPayable: this.formGroup.get('termInterestPayable').value
       },
       currency: {
-        code: currency.code,
-        name: currency.name,
-        sign: currency.sign,
-        scale: currency.digits
+        code: foundCurrency.code,
+        name: foundCurrency.name,
+        sign: foundCurrency.sign,
+        scale: foundCurrency.digits
       },
       charges: this.chargesForm.formData,
       expenseAccountIdentifier: this.formGroup.get('expenseAccountIdentifier').value,

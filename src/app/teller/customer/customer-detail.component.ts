@@ -1,37 +1,30 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Component, OnDestroy} from '@angular/core';
-import {TellerStore} from '../store/index';
 import * as fromTeller from '../store/index';
+import {TellerStore} from '../store/index';
 import {Customer} from '../../services/customer/domain/customer.model';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 import {LoadAllDepositProductsAction, LoadAllLoanProductsAction} from '../store/teller.actions';
 import {CustomerService} from '../../services/customer/customer.service';
-import {TransactionType} from '../../services/teller/domain/teller-transaction.model';
-
-interface Action {
-  transactionType: TransactionType;
-  color: string;
-  icon: string;
-  title: string;
-  description: string;
-  disabled?: boolean;
-}
+import {Action, AvailableActionService} from '../services/available-actions.service';
 
 @Component({
   templateUrl: './customer-detail.component.html'
@@ -50,19 +43,9 @@ export class TellerCustomerDetailComponent implements OnDestroy {
 
   hasLoanProducts$: Observable<boolean>;
 
-  depositActions: Action[] = [
-    { transactionType: 'ACCO', color: 'indigo-A400', icon: 'create', title: 'Open account', description: '' },
-    { transactionType: 'ACCC', color: 'indigo-A400', icon: 'close', title: 'Close account', description: ''},
-    { transactionType: 'ACCT', color: 'indigo-A400', icon: 'swap_horiz', title: 'Account transfer', description: ''},
-    { transactionType: 'CDPT', color: 'indigo-A400', icon: 'arrow_forward', title: 'Cash deposit', description: ''},
-    { transactionType: 'CWDL', color: 'indigo-A400', icon: 'arrow_back', title: 'Cash withdrawal', description: ''}
-  ];
+  availableActions$: Observable<Action[]>;
 
-  loanActions: Action[] = [
-    { transactionType: 'PPAY', color: 'indigo-A400', icon: 'arrow_forward', title: 'Repay loan', description: '' }
-  ];
-
-  constructor(private store: TellerStore, private customerService: CustomerService) {
+  constructor(private store: TellerStore, private customerService: CustomerService, private actionService: AvailableActionService) {
     this.customer$ = store.select(fromTeller.getTellerSelectedCustomer)
       .filter(customer => !!customer);
 
@@ -80,6 +63,9 @@ export class TellerCustomerDetailComponent implements OnDestroy {
     this.loadLoanProductsSubscription = this.customer$
       .map(customer => new LoadAllLoanProductsAction(customer.identifier))
       .subscribe(this.store);
+
+    this.availableActions$ = this.customer$
+      .mergeMap(customer => this.actionService.getAvailableActions(customer.identifier));
   }
 
   ngOnDestroy(): void {

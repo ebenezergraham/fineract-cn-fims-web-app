@@ -1,19 +1,21 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Routes} from '@angular/router';
 import {MainComponent} from './main.component';
 import {ChangePasswordGuard} from '../services/security/change.password.service';
@@ -25,7 +27,7 @@ export const MainRoutes: Routes = [
   {
     path: '', component: MainComponent, canActivateChild: [ChangePasswordGuard, PermissionGuard], children: [
       { path: '', redirectTo: '/quickAccess', pathMatch: 'full'},
-      { path: 'quickAccess', component: QuickAccessComponent, data: { title: "Quick access" } },
+      { path: 'quickAccess', component: QuickAccessComponent, data: { title: 'Quick access' } },
       { path: 'offices', loadChildren: './../offices/office.module#OfficeModule' },
       { path: 'employees', loadChildren: './../employees/employee.module#EmployeeModule' },
       { path: 'roles', loadChildren: './../roles/role.module#RoleModule' },
@@ -36,11 +38,11 @@ export const MainRoutes: Routes = [
       { path: 'deposits', loadChildren: './../depositAccount/deposit-account.module#DepositAccountModule' },
       { path: 'teller', loadChildren: './../teller/teller.module#TellerModule' },
       { path: 'reports', loadChildren: './../reporting/reporting.module#ReportingModule' },
-      { path: 'denied', component: AccessDeniedComponent, data: { title: "Not allowed" } }
+      { path: 'denied', component: AccessDeniedComponent, data: { title: 'Not allowed' } }
     ]
   },
   {
-    path: 'changePassword', loadChildren: './../user/user.module#UserModule', data: { title: "Change password" }
+    path: 'changePassword', loadChildren: './../user/user.module#UserModule', data: { title: 'Change password' }
   }
 
 ];

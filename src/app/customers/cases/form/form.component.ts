@@ -1,19 +1,21 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {TdStepComponent} from '@covalent/core';
 import {CaseParameters} from '../../../services/portfolio/domain/individuallending/case-parameters.model';
@@ -22,7 +24,6 @@ import {CreditWorthinessSnapshot} from '../../../services/portfolio/domain/indiv
 import {CaseDebtToIncomeFormComponent, DebtToIncomeFormData} from './debt-to-income/debt-to-income.component';
 import {CaseCoSignerFormComponent, CoSignerFormData} from './co-signer/co-signer.component';
 import {Product} from '../../../services/portfolio/domain/product.model';
-import {CaseDocumentsFormComponent} from './documents/documents.component';
 import {ProductInstance} from '../../../services/depositAccount/domain/instance/product-instance.model';
 import {FimsCase} from '../../../services/portfolio/domain/fims-case.model';
 
@@ -44,8 +45,6 @@ export class CaseFormComponent implements OnInit {
 
   @ViewChild('coSignerForm') coSignerForm: CaseCoSignerFormComponent;
   coSignerFormData: CoSignerFormData;
-
-  @ViewChild('documentsForm') documentsForm: CaseDocumentsFormComponent;
 
   @Input('products') products: Product[];
 
@@ -80,7 +79,8 @@ export class CaseFormComponent implements OnInit {
     this.detailFormData = {
       identifier: caseInstance.identifier,
       productIdentifier: caseInstance.productIdentifier,
-      principalAmount: caseInstance.parameters.maximumBalance,
+      interest: caseInstance.interest.toFixed(2),
+      principalAmount: caseInstance.parameters.maximumBalance.toFixed(2),
       term: caseInstance.parameters.termRange.maximum,
       termTemporalUnit: caseInstance.parameters.termRange.temporalUnit,
       paymentTemporalUnit: caseInstance.parameters.paymentCycle.temporalUnit,
@@ -93,34 +93,34 @@ export class CaseFormComponent implements OnInit {
   }
 
   private prepareDeptToIncomeForm(snapshots: CreditWorthinessSnapshot[]): void {
-    const snapshot: CreditWorthinessSnapshot = snapshots.find(snapshot => snapshot.forCustomer === this.customerId);
-    if(snapshot) {
+    const foundSnapshot: CreditWorthinessSnapshot = snapshots.find(snapshot => snapshot.forCustomer === this.customerId);
+    if (foundSnapshot) {
       this.debtToIncomeFormData = {
-        incomeSources: snapshot.incomeSources,
-        debts: snapshot.debts
+        incomeSources: foundSnapshot.incomeSources,
+        debts: foundSnapshot.debts
       };
     } else {
       this.debtToIncomeFormData = {
         incomeSources: [],
         debts: []
-      }
+      };
     }
   }
 
   private prepareCosignerForm(snapshots: CreditWorthinessSnapshot[]): void {
-    const snapshot: CreditWorthinessSnapshot = snapshots.find(snapshot => snapshot.forCustomer !== this.customerId);
-    if(snapshot) {
+    const foundSnapshot: CreditWorthinessSnapshot = snapshots.find(snapshot => snapshot.forCustomer !== this.customerId);
+    if (foundSnapshot) {
       this.coSignerFormData = {
-        customerId: snapshot.forCustomer,
-        incomeSources: snapshot.incomeSources,
-        debts: snapshot.debts
+        customerId: foundSnapshot.forCustomer,
+        incomeSources: foundSnapshot.incomeSources,
+        debts: foundSnapshot.debts
       };
     } else {
       this.coSignerFormData = {
         customerId: null,
         incomeSources: [],
         debts: []
-      }
+      };
     }
   }
 
@@ -146,13 +146,13 @@ export class CaseFormComponent implements OnInit {
     };
 
     const creditWorthinessSnapshots = [customerSnapshot];
-    if(cosignerSnapshot.forCustomer) {
+    if (cosignerSnapshot.forCustomer) {
       creditWorthinessSnapshots.push(cosignerSnapshot);
     }
 
     const caseParameters: CaseParameters = {
       customerIdentifier: this.customerId,
-      maximumBalance: this.detailForm.formData.principalAmount,
+      maximumBalance: parseFloat(this.detailForm.formData.principalAmount),
       paymentCycle: {
         alignmentDay: this.detailForm.formData.paymentAlignmentDay,
         alignmentMonth: this.detailForm.formData.paymentAlignmentMonth,
@@ -171,6 +171,7 @@ export class CaseFormComponent implements OnInit {
       currentState: this.caseInstance.currentState,
       identifier: this.detailForm.formData.identifier,
       productIdentifier: this.detailForm.formData.productIdentifier,
+      interest: parseFloat(this.detailForm.formData.interest),
       parameters: caseParameters,
       depositAccountIdentifier: this.detailForm.formData.depositAccountIdentifier
     };
@@ -194,7 +195,8 @@ export class CaseFormComponent implements OnInit {
     return this.coSignerForm.valid ? 'complete' : this.coSignerForm.pristine ? 'none' : 'required';
   }
 
-  get documentsFormState(): string {
-    return this.documentsForm.valid ? 'complete' : this.documentsForm.pristine ? 'none' : 'required';
+  showIdentifierValidationError(): void {
+    this.detailForm.showIdentifierValidationError();
+    this.detailsStep.open();
   }
 }

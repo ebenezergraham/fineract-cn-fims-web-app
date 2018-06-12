@@ -1,21 +1,22 @@
 <!--
- Copyright 2017 The Mifos Initiative.
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
 
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
 -->
 
 <fims-layout-card-over title="{{'Upload portrait' | translate}}" [navigateBackTo]="['../']">
-  <md-card-content>
+  <mat-card-content>
     <div layout="column" layout-align="center center">
       <fims-portrait [blob]="portrait" [size]="'large'"></fims-portrait>
     </div>
@@ -27,10 +28,10 @@
       <div layout="row" layout-margin>
         <td-file-upload #singleFileUpload (select)="selectEvent($event)" (upload)="uploadEvent($event)"
                         accept=".jpg,.png">
-          <md-icon>file_upload</md-icon>
+          <mat-icon>file_upload</mat-icon>
           <span translate>Click here to upload</span><span>{{ singleFileUpload.files?.name }}</span>
           <ng-template td-file-input-label>
-            <md-icon>attach_file</md-icon>
+            <mat-icon>attach_file</mat-icon>
             <span translate>Choose a file to upload(max size 512 KB)</span>
           </ng-template>
         </td-file-upload>
@@ -39,10 +40,10 @@
         Portrait can't exceed size of 512KB.
       </span>
       <div layout="row" layout-margin *hasPermission="{ id: 'customer_portrait', accessLevel: 'DELETE' }">
-        <button md-raised-button color="warn" (click)="deletePortrait()">{{'DELETE PORTRAIT' | translate}}
+        <button mat-raised-button color="warn" (click)="deletePortrait()">{{'DELETE PORTRAIT' | translate}}
         </button>
       </div>
 
     </div>
-  </md-card-content>
+  </mat-card-content>
 </fims-layout-card-over>

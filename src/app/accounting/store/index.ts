@@ -1,19 +1,21 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import * as fromRoot from '../../store';
 import * as fromLedgers from './ledger/ledgers.reducer';
 import * as fromLedgerForm from './ledger/form.reducer';
@@ -22,22 +24,29 @@ import * as fromChartOfAccounts from './ledger/chart-of-account.reducer';
 import * as fromJournalEntrySearch from './ledger/journal-entry/search.reducer';
 import * as fromAccounts from './account/accounts.reducer';
 import * as fromAccountEntrySearch from './account/entries/search.reducer';
+import * as fromCheques from './cheques/cheques.reducer';
+import * as fromPayrolls from './payroll/payrolls.reducer';
 import {ActionReducer, Store} from '@ngrx/store';
 import {createReducer} from '../../store/index';
 import {createSelector} from 'reselect';
 import {
-  createResourceReducer, getResourceEntities,
+  createResourceReducer,
+  getResourceAll,
   getResourceLoadedAt,
   getResourceSelected,
   ResourceState
 } from '../../common/store/resource.reducer';
 import {createFormReducer, FormState, getFormError} from '../../common/store/form.reducer';
 import {
-  createSearchReducer, getSearchEntities, getSearchLoading, getSearchTotalElements, getSearchTotalPages,
+  createSearchReducer,
+  getSearchEntities,
+  getSearchLoading,
+  getSearchTotalElements,
+  getSearchTotalPages,
   SearchState
 } from '../../common/store/search.reducer';
 
-export interface State extends fromRoot.State{
+export interface State extends fromRoot.State {
   accounts: ResourceState;
   accountForm: FormState;
   accountEntrySearch: fromAccountEntrySearch.State;
@@ -52,6 +61,11 @@ export interface State extends fromRoot.State{
   transactionTypes: ResourceState;
   transactionTypeSearch: SearchState;
   transactionForm: FormState;
+
+  cheques: ResourceState;
+
+  payrollCollections: ResourceState;
+  payrollPayments: SearchState;
 }
 
 const reducers = {
@@ -70,13 +84,18 @@ const reducers = {
   accounts: createResourceReducer('Account', fromAccounts.reducer),
   accountForm: createFormReducer('Account'),
   accountEntrySearch: fromAccountEntrySearch.reducer,
+
+  cheques: createResourceReducer('Cheque', fromCheques.reducer),
+
+  payrollCollections: createResourceReducer('Payroll Collection', fromPayrolls.reducer),
+  payrollPayments: createSearchReducer('Payroll Payment')
 };
 
 export const accountingModuleReducer: ActionReducer<State> = createReducer(reducers);
 
-export class AccountingStore extends Store<State>{}
+export class AccountingStore extends Store<State> {}
 
-export function accountingStoreFactory(appStore: Store<fromRoot.State>){
+export function accountingStoreFactory(appStore: Store<fromRoot.State>) {
   appStore.replaceReducer(accountingModuleReducer);
   return appStore;
 }
@@ -140,18 +159,19 @@ export const getAccountEntrySearchEntities = createSelector(getAccountEntrySearc
 export const getAccountEntrySearchTotalElements = createSelector(getAccountEntrySearchState, fromAccountEntrySearch.getTotalElements);
 export const getAccountEntrySearchTotalPages = createSelector(getAccountEntrySearchState, fromAccountEntrySearch.getTotalPages);
 
-export const getAccountEntrySearchResults = createSelector(getAccountEntrySearchEntities, getAccountEntrySearchTotalElements, getAccountEntrySearchTotalPages, (entities, totalElements, totalPages) => {
-  return {
-    entries: entities,
-    totalPages: totalPages,
-    totalElements: totalElements
-  }
-});
+export const getAccountEntrySearchResults = createSelector(
+  getAccountEntrySearchEntities, getAccountEntrySearchTotalElements, getAccountEntrySearchTotalPages,
+  (entities, totalElements, totalPages) => {
+    return {
+      entries: entities,
+      totalPages: totalPages,
+      totalElements: totalElements
+    };
+  });
 
 /**
  * Transaction Types
  */
-
 export const getTransactionTypesState = (state: State) => state.transactionTypes;
 
 export const getTransactionTypeLoadedAt = createSelector(getTransactionTypesState, getResourceLoadedAt);
@@ -168,10 +188,48 @@ export const getTransactionTypeSearchTotalElements = createSelector(getTransacti
 export const getTransactionTypeSearchTotalPages = createSelector(getTransactionTypeSearchState, getSearchTotalPages);
 export const getTransactionTypeSearchLoading = createSelector(getTransactionTypeSearchState, getSearchLoading);
 
-export const getTransactionTypeSearchResults = createSelector(getSearchTransactionTypes, getTransactionTypeSearchTotalPages, getTransactionTypeSearchTotalElements, (transactionTypes, totalPages, totalElements) => {
-  return {
-    transactionTypes,
-    totalPages,
-    totalElements
-  };
-});
+export const getTransactionTypeSearchResults = createSelector(
+  getSearchTransactionTypes, getTransactionTypeSearchTotalPages, getTransactionTypeSearchTotalElements,
+  (transactionTypes, totalPages, totalElements) => {
+    return {
+      transactionTypes,
+      totalPages,
+      totalElements
+    };
+  });
+
+/**
+ * Cheques
+ */
+export const getChequesState = (state: State) => state.cheques;
+
+export const getChequeLoadedAt = createSelector(getChequesState, getResourceLoadedAt);
+export const getSelectedCheque = createSelector(getChequesState, getResourceSelected);
+
+export const getAllChequeEntities = createSelector(getChequesState, getResourceAll);
+
+/**
+ * Payroll collections
+ */
+export const getPayrollCollectionsState = (state: State) => state.payrollCollections;
+
+export const getPayrollCollectionLoadedAt = createSelector(getPayrollCollectionsState, getResourceLoadedAt);
+export const getSelectedPayrollCollection = createSelector(getPayrollCollectionsState, getResourceSelected);
+
+export const getAllPayrollCollectionEntities = createSelector(getPayrollCollectionsState, getResourceAll);
+
+export const getPayrollPaymentSearchState = (state: State) => state.payrollPayments;
+
+export const getSearchPayrollPayments = createSelector(getPayrollPaymentSearchState, getSearchEntities);
+export const getPayrollPaymentsSearchTotalElements = createSelector(getPayrollPaymentSearchState, getSearchTotalElements);
+export const getPayrollPaymentsSearchTotalPages = createSelector(getPayrollPaymentSearchState, getSearchTotalPages);
+
+export const getPayrollPaymentSearchResults = createSelector(
+  getSearchPayrollPayments, getPayrollPaymentsSearchTotalElements, getPayrollPaymentsSearchTotalPages,
+  (data, totalPages, totalElements) => {
+    return {
+      data,
+      totalPages,
+      totalElements
+    };
+  });

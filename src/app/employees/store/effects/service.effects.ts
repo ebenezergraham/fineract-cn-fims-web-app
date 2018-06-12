@@ -1,23 +1,25 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import {Injectable} from '@angular/core';
 import {OfficeService} from '../../../services/office/office.service';
-import {Effect, Actions} from '@ngrx/effects';
-import {Observable} from 'rxjs';
+import {Actions, Effect} from '@ngrx/effects';
+import {Observable} from 'rxjs/Observable';
 import {Action} from '@ngrx/store';
 import {of} from 'rxjs/observable/of';
 import * as employeeActions from '../employee.actions';
@@ -27,8 +29,6 @@ import {Password} from '../../../services/identity/domain/password.model';
 
 @Injectable()
 export class EmployeeApiEffects {
-
-  constructor(private actions$: Actions, private officeService: OfficeService, private identityService: IdentityService) { }
 
   @Effect()
   createEmployee$: Observable<Action> = this.actions$
@@ -49,21 +49,21 @@ export class EmployeeApiEffects {
     .ofType(employeeActions.UPDATE)
     .map((action: employeeActions.UpdateEmployeeAction) => action.payload)
     .mergeMap(payload => {
-        let employee = payload.employee;
-        let httpCalls: Observable<any>[] = [];
+        const employee = payload.employee;
+        const httpCalls: Observable<any>[] = [];
 
         httpCalls.push(this.officeService.updateEmployee(employee));
 
-        if(payload.contactDetails){
-          httpCalls.push(this.officeService.setContactDetails(employee.identifier, payload.contactDetails))
+        if (payload.contactDetails) {
+          httpCalls.push(this.officeService.setContactDetails(employee.identifier, payload.contactDetails));
         }
 
-        if(payload.role){
-          httpCalls.push(this.identityService.changeUserRole(employee.identifier, new RoleIdentifier(payload.role)))
+        if (payload.role) {
+          httpCalls.push(this.identityService.changeUserRole(employee.identifier, new RoleIdentifier(payload.role)));
         }
 
-        if(payload.password){
-          httpCalls.push(this.identityService.changePassword(employee.identifier, new Password(payload.password)))
+        if (payload.password) {
+          httpCalls.push(this.identityService.changePassword(employee.identifier, new Password(payload.password)));
         }
 
         return Observable.forkJoin(httpCalls)
@@ -71,7 +71,7 @@ export class EmployeeApiEffects {
             resource: payload.employee,
             activatedRoute: payload.activatedRoute
           }))
-          .catch((error) => of(new employeeActions.UpdateEmployeeFailAction(error)))
+          .catch((error) => of(new employeeActions.UpdateEmployeeFailAction(error)));
     });
 
   @Effect()
@@ -87,7 +87,9 @@ export class EmployeeApiEffects {
           resource: payload.employee,
           activatedRoute: payload.activatedRoute
         }))
-        .catch((error) => of(new employeeActions.DeleteEmployeeFailAction(error)))
+        .catch((error) => of(new employeeActions.DeleteEmployeeFailAction(error)));
       }
     );
+
+  constructor(private actions$: Actions, private officeService: OfficeService, private identityService: IdentityService) { }
 }

@@ -1,26 +1,25 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
 import * as fromCases from './store/index';
-import * as fromRoot from '../../store';
 import {CasesStore} from './store/index';
-import {Subscription} from 'rxjs';
-import {SelectAction} from './store/case.actions';
+import * as fromRoot from '../../store';
 import {Observable} from 'rxjs/Observable';
 import {FimsPermission} from '../../services/security/authz/fims-permission.model';
 import {FimsCase} from '../../services/portfolio/domain/fims-case.model';
@@ -28,23 +27,17 @@ import {FimsCase} from '../../services/portfolio/domain/fims-case.model';
 @Component({
   templateUrl: './case.detail.component.html'
 })
-export class CaseDetailComponent implements OnInit, OnDestroy {
+export class CaseDetailComponent implements OnInit {
 
-  private actionsSubscription: Subscription;
-
-  numberFormat: string = '1.2-2';
+  numberFormat = '1.2-2';
 
   caseInstance$: Observable<FimsCase>;
 
   canEdit$: Observable<boolean>;
 
-  constructor(private route: ActivatedRoute, private casesStore: CasesStore) {}
+  constructor(private casesStore: CasesStore) {}
 
   ngOnInit(): void {
-    this.actionsSubscription = this.route.params
-      .map(params => new SelectAction(params['caseId']))
-      .subscribe(this.casesStore);
-
     this.caseInstance$ = this.casesStore.select(fromCases.getSelectedCase);
 
     this.canEdit$ = Observable.combineLatest(
@@ -61,15 +54,7 @@ export class CaseDetailComponent implements OnInit, OnDestroy {
     return permissions.filter(permission =>
         permission.id === 'portfolio_cases' &&
         permission.accessLevel === 'CHANGE'
-      ).length > 0
-  }
-
-  ngOnDestroy(): void {
-    this.actionsSubscription.unsubscribe();
-  }
-
-  disburse(): void{
-    // TODO: Implement when API available
+      ).length > 0;
   }
 
 }

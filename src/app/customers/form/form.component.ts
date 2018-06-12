@@ -1,29 +1,32 @@
 /**
- * Copyright 2017 The Mifos Initiative.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
-import {Component, OnInit, Input, ViewChild, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {TdStepComponent} from '@covalent/core';
 import {Customer} from '../../services/customer/domain/customer.model';
-import {CustomerDetailFormData, CustomerDetailFormComponent} from './detail/detail.component';
+import {CustomerDetailFormComponent, CustomerDetailFormData} from './detail/detail.component';
 import {AddressFormComponent} from '../../common/address/address.component';
 import {Address} from '../../services/domain/address/address.model';
 import {CustomerContactFormComponent} from './contact/contact.component';
 import {ContactDetail} from '../../services/domain/contact/contact-detail.model';
 import {Value} from '../../services/catalog/domain/value.model';
 import {CustomerCustomFieldsComponent} from './customFields/custom-fields.component';
+import {Catalog} from '../../services/catalog/domain/catalog.model';
 
 @Component({
   selector: 'fims-customer-form-component',
@@ -56,6 +59,8 @@ export class CustomerFormComponent implements OnInit {
     this.customFieldsFormData = customer.customValues;
   };
 
+  @Input('catalog') catalog: Catalog;
+
   @Input('editMode') editMode: boolean;
 
   @Output('onSave') onSave = new EventEmitter<Customer>();
@@ -84,11 +89,11 @@ export class CustomerFormComponent implements OnInit {
     this.openDetailStep();
   }
 
-  openDetailStep(): void{
+  openDetailStep(): void {
     this.step.open();
   }
 
-  showIdentifierValidationError(): void{
+  showIdentifierValidationError(): void {
     this.detailForm.setError('identifier', 'unique', true);
     this.openDetailStep();
   }
@@ -102,7 +107,9 @@ export class CustomerFormComponent implements OnInit {
   }
 
   get isValid(): boolean {
-    return (this.detailForm.valid && this.addressForm.valid) && this.contactForm.validWhenOptional && this.customFieldsForm.validWhenOptional
+    return (this.detailForm.valid && this.addressForm.valid)
+      && this.contactForm.validWhenOptional
+      && this.customFieldsForm.valid;
   }
 
   get customer(): Customer {
