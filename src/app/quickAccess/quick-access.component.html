@@ -95,4 +95,20 @@
       </mat-card>
     </div>
   </div>
+  <div layout="column" layout-gt-sm="row" class="inset">
+    <div flex-gt-sm="40" *hasPermission="{ id: 'notification_roles', accessLevel: 'READ'}">
+      <mat-card>
+        <mat-card-title translate>Notification</mat-card-title>
+        <mat-card-subtitle translate>Create and edit Gateway APIs for the notification service.</mat-card-subtitle>
+        <mat-card-actions>
+          <a mat-button color="accent" class="text-upper" [routerLink]="['/notification/create']">
+            <span translate>Gateways</span>
+          </a>
+          <a mat-button color="accent" class="text-upper" [routerLink]="['/notification/template/create']" *hasPermission="{ id: 'identity_roles', accessLevel: 'CHANGE'}">
+            <span translate>View Templates</span>
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
 </div>
