@@ -17,10 +17,26 @@
  * under the License.
  */
 
-import {Customer} from './customer.model';
+import {Action} from '@ngrx/store';
+import {type} from '../util';
+import {FetchRequest} from '../../services/domain/paging/fetch-request.model';
+import {SearchResult} from '../../common/store/search.reducer';
 
-export interface CustomerPage {
-  customers: Customer[];
-  totalElements: number;
-  totalPages: number;
+export const SEARCH = type('[Notification] Search');
+export const SEARCH_COMPLETE = type('[Notification] Search Complete');
+
+export class SearchAction implements Action {
+  readonly type = SEARCH;
+
+  constructor(public payload: FetchRequest) { }
 }
+
+export class SearchCompleteAction implements Action {
+  readonly type = SEARCH_COMPLETE;
+
+  constructor(public payload: SearchResult) { }
+}
+
+export type Actions
+  = SearchAction
+  | SearchCompleteAction;

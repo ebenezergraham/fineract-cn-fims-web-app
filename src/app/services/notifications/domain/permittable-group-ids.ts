@@ -16,10 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-export interface CustomerDocument {
-  identifier: string;
-  description?: string;
-  completed?: boolean;
-  createdBy?: string;
-  createdOn?: string;
+export class NotificationPermittableGroupIds {
+  public static readonly SELF_MANAGEMENT = 'customer__v1__self';
 }
+
+

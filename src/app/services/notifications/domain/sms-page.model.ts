@@ -17,30 +17,10 @@
  * under the License.
  */
 
-import {CustomerState} from './customer-state.model';
-import {CustomerType} from './customer-type.model';
-import {Address} from '../../domain/address/address.model';
-import {ContactDetail} from '../../domain/contact/contact-detail.model';
-import {Value} from '../../catalog/domain/value.model';
+import {SMSConfiguration} from './sms-configuration.model';
 
-export interface SMSConfiguration {
-  identifier: string;
-  type: CustomerType;
-  givenName: string;
-  middleName?: string;
-  surname: string;
-  accountBeneficiary?: string;
-  referenceCustomer?: string;
-  assignedOffice?: string;
-  assignedEmployee?: string;
-  address: Address;
-  contactDetails?: ContactDetail[];
-  currentState?: CustomerState;
-  applicationDate?: string;
-  customValues: Value[];
-  member: boolean;
-  createdBy?: string;
-  createdOn?: string;
-  lastModifiedBy?: string;
-  lastModifiedOn?: string;
+export interface SMSPage {
+  smsConfiguration: SMSConfiguration[];
+  totalElements: number;
+  totalPages: number;
 }

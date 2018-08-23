@@ -16,10 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {Command} from './command.model';
-import {TaskDefinition} from './task-definition.model';
 
-export interface ProcessStep {
-  command: Command;
-  taskDefinitions: TaskDefinition[];
+export interface SMSConfiguration {
+  identifier: string;
+  auth_token: string;
+  account_sid: string;
+  sender_number: string;
+  state: string;
 }
