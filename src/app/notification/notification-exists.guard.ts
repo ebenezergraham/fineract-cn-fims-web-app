@@ -27,7 +27,7 @@ import {CustomersStore} from './store/index';
 import {ExistsGuardService} from '../common/guards/exists-guard';
 
 @Injectable()
-export class CustomerExistsGuard implements CanActivate {
+export class NotificationExistsGuard implements CanActivate {
 
   constructor(private store: CustomersStore,
               private customerService: CustomerService,

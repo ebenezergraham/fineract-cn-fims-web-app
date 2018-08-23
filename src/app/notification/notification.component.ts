@@ -27,19 +27,18 @@ import {SEARCH} from '../store/customer/customer.actions';
 import {CustomersStore} from './store/index';
 
 @Component({
-  templateUrl: './customer.component.html'
+  templateUrl: './notification.component.html'
 })
-export class CustomerComponent implements OnInit {
+export class NotificationComponent implements OnInit {
 
-  customerData$: Observable<TableData>;
+  smsData$: Observable<TableData>;
 
   loading$: Observable<boolean>;
 
   columns: any[] = [
-    { name: 'identifier', label: 'Id' },
-    { name: 'givenName', label: 'First Name' },
-    { name: 'surname', label: 'Last Name' },
-    { name: 'currentState', label: 'Current status' }
+    { name: 'id', label: 'Id' },
+    { name: 'identifier', label: 'Account' },
+    { name: 'option', label: 'Option' }
   ];
 
   private searchTerm: string;
@@ -49,7 +48,7 @@ export class CustomerComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private store: CustomersStore) {}
 
   ngOnInit(): void {
-    this.customerData$ = this.store.select(fromRoot.getCustomerSearchResults)
+    this.smsData$ = this.store.select(fromRoot.getCustomerSearchResults)
       .map(customerPage => ({
         data: customerPage.customers,
         totalElements: customerPage.totalElements,

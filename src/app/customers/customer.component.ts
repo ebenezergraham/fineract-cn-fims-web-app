@@ -31,7 +31,7 @@ import {CustomersStore} from './store/index';
 })
 export class CustomerComponent implements OnInit {
 
-  customerData$: Observable<TableData>;
+  smsConfigurationData$: Observable<TableData>;
 
   loading$: Observable<boolean>;
 
@@ -49,7 +49,7 @@ export class CustomerComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private store: CustomersStore) {}
 
   ngOnInit(): void {
-    this.customerData$ = this.store.select(fromRoot.getCustomerSearchResults)
+    this.smsConfigurationData$ = this.store.select(fromRoot.getCustomerSearchResults)
       .map(customerPage => ({
         data: customerPage.customers,
         totalElements: customerPage.totalElements,

@@ -202,6 +202,36 @@ export const getLedgerSearchResults = createSelector(getSearchLedgers, getLedger
   };
 });
 
+/**
+ * Customer Search Selectors
+ */
+export const getCustomerSearchState = (state: State) => state.smsConfigSearch;
+
+export const getSearchSMSConfig = createSelector(getSMSSearchState, getSearchEntities);
+export const getSearchEmailConfig = createSelector(getEmailSearchState, getSearchEntities);
+export const getSMSConfigSearchTotalElements = createSelector(getSMSSearchState, getSearchTotalElements);
+export const getEmailConfigSearchTotalPages = createSelector(getEmailSearchState, getSearchTotalPages);
+export const getSMSConfigSearchLoading = createSelector(getSMSSearchState, getSearchLoading);
+export const getEmailConfigSearchLoading = createSelector(getEmailSearchState, getSearchLoading);
+
+export const getSMSSearchResults = createSelector(getSearchSMSConfig, getSMSConfigSearchTotalElements, getSMSConfigSearchLoading,
+  (smsConfiguration, totalPages, totalElements) => {
+    return {
+      customers: smsConfiguration,
+      totalPages: totalPages,
+      totalElements: totalElements
+    };
+  });
+
+export const getEmailSearchResults = createSelector(getSearchEmailConfig, getEmailConfigSearchTotalPages, getEmailConfigSearchLoading,
+  (emailConfiguration, totalPages, totalElements) => {
+    return {
+      customers: emailConfiguration,
+      totalPages: totalPages,
+      totalElements: totalElements
+    };
+  });
+
 export const getAuthenticationState = (state: State) => state.authentication;
 
 export const getAuthentication = createSelector(getAuthenticationState, fromAuthentication.getAuthentication);

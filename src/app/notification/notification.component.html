@@ -15,22 +15,29 @@
   limitations under the License.
 -->
 
-<fims-layout-card-over title="{{'Manage members' | translate}}">
+<fims-layout-card-over title="{{'Manage Notification Service' | translate}}">
   <fims-layout-card-over-header-menu>
     <td-search-box #searchBox placeholder="{{'Search' | translate}}" (search)="search($event)" [alwaysVisible]="false"></td-search-box>
   </fims-layout-card-over-header-menu>
   <fims-two-column-layout>
     <mat-nav-list left>
       <h3 mat-subheader translate>Management</h3>
-      <a mat-list-item [routerLink]="['tasks']" *hasPermission="{ id: 'customer_tasks', accessLevel: 'READ' }">
-        <mat-icon matListAvatar>playlist_add_check</mat-icon>
-        <h3 matLine translate>Tasks</h3>
-        <p matLine translate>Manage tasks</p>
+      <a mat-list-item [routerLink]="['configureSMS']" *hasPermission="{ id: 'configure_sms', accessLevel: 'REMOVE' }">
+        <mat-icon mat-basic-chip>playlist_add_check</mat-icon>
+        <h3 matLine translate>SMS Gateway</h3>
+        <p matLine translate>Manage SMS Gateways</p>
       </a>
-      <a mat-list-item [routerLink]="['catalog/detail']" *hasPermission="{ id: 'catalog_catalogs', accessLevel: 'READ' }">
-        <mat-icon matListAvatar>format_list_numbered</mat-icon>
-        <h3 matLine translate>Custom fields</h3>
-        <p matLine translate>Manage custom fields</p>
+
+      <a mat-list-item [routerLink]="['configureEmail']" *hasPermission="{ id: 'configure_email', accessLevel: 'REMOVE' }">
+        <mat-icon mat-basic-chip>playlist_add_check</mat-icon>
+        <h3 matLine translate>Email Gateway</h3>
+        <p matLine translate>Manage Email Gateways</p>
+      </a>
+
+      <a mat-list-item [routerLink]="['configureEvents']" *hasPermission="{ id: 'configure_events', accessLevel: 'REMOVE' }">
+        <mat-icon mat-basic-chip>playlist_add_check</mat-icon>
+        <h3 matLine translate>Notifications</h3>
+        <p matLine translate>Enable/Disable Notifications</p>
       </a>
     </mat-nav-list>
     <fims-data-table
@@ -38,7 +45,7 @@
       (onFetch)="fetchCustomers($event)"
       (onActionCellClick)="rowSelect($event)"
       [columns]="columns"
-      [data]="customerData$ | async"
+      [data]="smsData$ | async"
       [loading]="loading$ | async"
       [sortable]="true"
       [pageable]="true">
