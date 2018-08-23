@@ -16,9 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {ContactDetail} from '../services/domain/contact/contact-detail.model';
+import {TaskDefinitionCommand} from '../../../services/customer/domain/task-definition.model';
 
-export function getContactDetailValueByType(contactDetails: ContactDetail[], type: string): string {
-  const items = contactDetails.filter(contact => contact.type === type);
-  return items.length ? items[0].value : '';
+interface CommandOption {
+  command: TaskDefinitionCommand;
+  label: string;
 }
+
+export const defaultCommandOptions: CommandOption[] = [
+  { command: 'ACTIVATE', label: 'is activated' },
+  { command: 'UNLOCK', label: 'is unlocked' },
+  { command: 'REOPEN', label: 'is reopened' }
+];

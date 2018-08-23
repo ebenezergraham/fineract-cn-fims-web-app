@@ -17,7 +17,7 @@
  * under the License.
  */
 import {Routes} from '@angular/router';
-import {CustomerComponent} from './customer.component';
+import {NotificationComponent} from './notification.component';
 import {CreateCustomerFormComponent} from './form/create/create.form.component';
 import {CustomerDetailComponent} from './detail/customer.detail.component';
 import {EditCustomerFormComponent} from './form/edit/edit.form.component';
@@ -46,7 +46,7 @@ import {EditCatalogFieldFormComponent} from './customFields/fields/form/edit.for
 export const CustomerRoutes: Routes = [
   {
     path: '',
-    component: CustomerComponent,
+    component: NotificationComponent,
     data: {title: 'Manage Customers', hasPermission: {id: 'customer_customers', accessLevel: 'READ'}},
     canActivate: [ CatalogExistsGuard ]
   },
