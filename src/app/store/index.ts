@@ -44,6 +44,7 @@ export interface State {
   customerSearch: SearchState;
   accountSearch: SearchState;
   ledgerSearch: SearchState;
+  notificationSearch: SearchState;
 }
 
 export const reducers = {
@@ -203,9 +204,10 @@ export const getLedgerSearchResults = createSelector(getSearchLedgers, getLedger
 });
 
 /**
- * Customer Search Selectors
+ * Notification Search Selectors
  */
-export const getCustomerSearchState = (state: State) => state.smsConfigSearch;
+export const getSMSSearchState = (state: State) => state.notificationSearch;
+export const getEmailSearchState = (state: State) => state.notificationSearch;
 
 export const getSearchSMSConfig = createSelector(getSMSSearchState, getSearchEntities);
 export const getSearchEmailConfig = createSelector(getEmailSearchState, getSearchEntities);
