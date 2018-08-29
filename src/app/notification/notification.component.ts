@@ -20,11 +20,11 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {FetchRequest} from '../services/domain/paging/fetch-request.model';
 import {TableData, TableFetchRequest} from '../common/data-table/data-table.component';
-import {Customer} from '../services/customer/domain/customer.model';
+import {SMSConfiguration} from '../services/notifications/domain/sms-configuration.model';
 import {Observable} from 'rxjs/Observable';
 import * as fromRoot from '../store';
 import {SEARCH} from '../store/customer/customer.actions';
-import {CustomersStore} from './store/index';
+import {NotificationStore} from './store/index';
 
 @Component({
   templateUrl: './notification.component.html'
@@ -45,14 +45,14 @@ export class NotificationComponent implements OnInit {
 
   private lastFetchRequest: FetchRequest = {};
 
-  constructor(private router: Router, private route: ActivatedRoute, private store: CustomersStore) {}
+  constructor(private router: Router, private route: ActivatedRoute, private store: NotificationStore) {}
 
   ngOnInit(): void {
-    this.smsData$ = this.store.select(fromRoot.getCustomerSearchResults)
-      .map(customerPage => ({
-        data: customerPage.customers,
-        totalElements: customerPage.totalElements,
-        totalPages: customerPage.totalPages
+    this.smsData$ = this.store.select(fromRoot.getSMSSearchResults)
+      .map(smsPage => ({
+        data: smsPage.customers,
+        totalElements: smsPage.totalElements,
+        totalPages: smsPage.totalPages
       }));
 
     this.loading$ = this.store.select(fromRoot.getCustomerSearchLoading);

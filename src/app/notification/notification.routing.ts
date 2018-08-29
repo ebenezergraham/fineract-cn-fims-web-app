@@ -18,7 +18,7 @@
  */
 import {Routes} from '@angular/router';
 import {NotificationComponent} from './notification.component';
-import {CreateCustomerFormComponent} from './form/create/create.form.component';
+import {CreateFormComponent} from './configureSMS/form/create/create.form.component';
 import {CustomerDetailComponent} from './detail/customer.detail.component';
 import {EditCustomerFormComponent} from './form/edit/edit.form.component';
 import {CustomerActivityComponent} from './detail/activity/activity.component';

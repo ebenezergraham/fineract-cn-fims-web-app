@@ -39,115 +39,28 @@ import {
 import {createFormReducer, FormState, getFormError} from '../../common/store/form.reducer';
 
 export interface State extends fromRoot.State {
-  customers: ResourceState;
-  customerForm: FormState;
-  tasks: ResourceState;
-  taskForm: FormState;
-  customerTasks: fromCustomerTasks.State;
-  customerCatalog: fromCatalogs.State;
-  customerCommands: fromCommands.State;
-  customerIdentificationCards: ResourceState;
-  customerIdentificationCardForm: FormState;
-  customerIdentificationCardScans: ResourceState;
-  customerIdentificationCardScanForm: FormState;
-  customerPayrollDistribution: fromPayrollDistribution.State;
+  smsConfiguration: ResourceState;
+  smsForm: FormState;
 }
 
 const reducers = {
-  customers: createResourceReducer('Customer', fromCustomers.reducer),
-  customerForm: createFormReducer('Customer'),
-  tasks: createResourceReducer('Task', fromTasks.reducer),
-  taskForm: createFormReducer('Task'),
-  customerTasks: fromCustomerTasks.reducer,
-  customerCatalog: fromCatalogs.reducer,
-  customerCommands: fromCommands.reducer,
-  customerIdentificationCards: createResourceReducer('Customer Identity Card', fromCustomerIdentificationCards.reducer, 'number'),
-  customerIdentificationCardForm: createFormReducer('Customer Identity Card'),
-  customerIdentificationCardScans: createResourceReducer('Customer Identity Card Scan', fromScans.reducer),
-  customerIdentificationCardScanForm: createFormReducer('Customer Identity Card Scan'),
-  customerPayrollDistribution: fromPayrollDistribution.reducer
-};
+  smsConfiguration: createResourceReducer('SMSConfiguration', fromSMSConfiguration.reducer),
+  smsConfigurationForm: createFormReducer('SMS Configuration'),
+  };
 
-export class CustomersStore extends Store<State> {}
+export class SMSConfigurationStore extends Store<State> {}
 
-export const customerModuleReducer: ActionReducer<State> = createReducer(reducers);
+export const smsConfigurationModuleReducer: ActionReducer<State> = createReducer(reducers);
 
 export function customerStoreFactory(appStore: Store<fromRoot.State>) {
-  appStore.replaceReducer(customerModuleReducer);
+  appStore.replaceReducer(smsConfigurationModuleReducer);
   return appStore;
 }
 
-export const getCustomersState = (state: State) => state.customers;
+export const getSMSConfigurationState = (state: State) => state.smsConfiguration;
 
-export const getCustomerFormState = (state: State) => state.customerForm;
-export const getCustomerFormError = createSelector(getCustomerFormState, getFormError);
+export const getSMSConfigurationFormState = (state: State) => state.smsForm;
+export const getSMSConfigurationFormError = createSelector(getSMSConfigurationFormState, getFormError);
 
-export const getCustomerLoadedAt = createSelector(getCustomersState, getResourceLoadedAt);
-export const getSelectedCustomer = createSelector(getCustomersState, getResourceSelected);
-
-/**
- * Task Selectors
- */
-export const getTasksState = (state: State) => state.tasks;
-
-export const getAllTaskEntities = createSelector(getTasksState, getResourceAll);
-
-export const getTaskLoadedAt = createSelector(getTasksState, getResourceLoadedAt);
-export const getSelectedTask = createSelector(getTasksState, getResourceSelected);
-
-/**
- * Customer Task Selectors
- */
-export const getCustomerTaskCommandsState = (state: State) => state.customerTasks;
-
-export const getCustomerTaskProcessSteps = createSelector(getCustomerTaskCommandsState, fromCustomerTasks.getProcessSteps);
-
-
-/**
- * Customer Command Selectors
- */
-
-export const getCustomerCommandsState = (state: State) => state.customerCommands;
-
-export const getAllCustomerCommands = createSelector(getCustomerCommandsState, fromCommands.getCommands);
-
-/**
- * Customer Identification Card Selectors
- */
-export const getCustomerIdentificationCardsState = (state: State) => state.customerIdentificationCards;
-
-export const getAllCustomerIdentificationCardEntities = createSelector(getCustomerIdentificationCardsState, getResourceAll);
-
-export const getCustomerIdentificationCardFormState = (state: State) => state.customerIdentificationCardForm;
-export const getCustomerIdentificationCardFormError = createSelector(getCustomerIdentificationCardFormState, getFormError);
-
-export const getIdentificationCardLoadedAt = createSelector(getCustomerIdentificationCardsState, getResourceLoadedAt);
-export const getSelectedIdentificationCard = createSelector(getCustomerIdentificationCardsState, getResourceSelected);
-
-/**
- * Customer Identification Card Scan Selectors
- */
-export const getIdentificationCardScansState = (state: State) => state.customerIdentificationCardScans;
-
-export const getAllIdentificationCardScanEntities = createSelector(getIdentificationCardScansState, getResourceAll);
-
-export const getCustomerIdentificationCardScanFormState = (state: State) => state.customerIdentificationCardScanForm;
-export const getCustomerIdentificationCardScanFormError = createSelector(getCustomerIdentificationCardScanFormState, getFormError);
-
-/**
- * Customer Payroll Distribution Selectors
- */
-export const getPayrollDistributionState = (state: State) => state.customerPayrollDistribution;
-
-export const getPayrollDistribution = createSelector(getPayrollDistributionState, fromPayrollDistribution.getPayrollDistribution);
-export const getPayrollDistributionLoadedAt = createSelector(getPayrollDistributionState,
-  fromPayrollDistribution.getPayrollDistributionLoadedAt);
-
-/**
- * Customer Catalog Selectors
- */
-export const getCustomerCatalogState = (state: State) => state.customerCatalog;
-
-export const getCustomerCatalog = createSelector(getCustomerCatalogState, fromCatalogs.getCustomerCatalog);
-export const getCustomerCatalogLoadedAt = createSelector(getCustomerCatalogState, fromCatalogs.getCustomerCatalogLoadedAt);
-export const getSelectedField = createSelector(getCustomerCatalogState, fromCatalogs.getSelectedField);
+export const getSMSConfigurationLoadedAt = createSelector(getSMSConfigurationState, getResourceLoadedAt);
+export const getSelectedSMSConfiguration = createSelector(getSMSConfigurationState, getResourceSelected);

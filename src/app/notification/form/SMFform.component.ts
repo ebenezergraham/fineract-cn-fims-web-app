@@ -22,10 +22,11 @@ import {Customer} from '../../services/customer/domain/customer.model';
 import {SMSGatewayFormComponent, SMSGatewayFormData} from './smsgateway/smsgateway.component';
 import {Value} from '../../services/catalog/domain/value.model';
 import {Catalog} from '../../services/catalog/domain/catalog.model';
+import {SMSConfiguration} from "../../services/notifications/domain/sms-configuration.model";
 
 @Component({
-  selector: 'fims-customer-form-component',
-  templateUrl: './form.component.html'
+  selector: 'fims-sms-form-component',
+  templateUrl: './sms.form.component.html'
 })
 export class CustomerFormComponent implements OnInit {
 

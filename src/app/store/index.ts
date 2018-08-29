@@ -58,6 +58,7 @@ export const reducers = {
   customerSearch: createSearchReducer('Customer'),
   accountSearch: createSearchReducer('Account', fromAccounts.reducer),
   ledgerSearch: createSearchReducer('Ledger'),
+  notificiationSearch: createSearchReducer('Configuration')
 };
 
 export function createReducer(asyncReducers = {}): ActionReducer<any> {
