@@ -17,14 +17,8 @@
  * under the License.
  */
 import * as fromRoot from '../../store';
-import * as fromCustomers from './customers.reducer';
-import * as fromCustomerTasks from './customerTasks/customer-tasks.reducer';
-import * as fromCustomerIdentificationCards from './identityCards/identity-cards.reducer';
-import * as fromCatalogs from './catalogs/catalog.reducer';
-import * as fromCommands from './commands/commands.reducer';
-import * as fromScans from './identityCards/scans/scans.reducer';
-import * as fromTasks from './tasks/tasks.reducer';
-import * as fromPayrollDistribution from './payroll/payroll.reducer';
+import * as fromNotification from './notification.reducer';
+
 
 import {ActionReducer, Store} from '@ngrx/store';
 import {createReducer} from '../../store/index';

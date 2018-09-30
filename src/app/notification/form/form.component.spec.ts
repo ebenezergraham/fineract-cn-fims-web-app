@@ -17,7 +17,7 @@
  * under the License.
  */
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {CustomerDetailFormComponent} from './smsgateway/smsgateway.component';
+import {CustomerDetailFormComponent} from '../../notificationservice/smsgateway/smsgateway.component';
 import {CustomerFormComponent} from './form.component';
 import {CustomerContactFormComponent} from './contact/contact.component';
 import {CustomerCustomFieldsComponent} from './customFields/custom-fields.component';

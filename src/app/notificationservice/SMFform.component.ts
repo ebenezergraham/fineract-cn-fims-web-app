@@ -18,33 +18,24 @@
  */
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {TdStepComponent} from '@covalent/core';
-import {Customer} from '../../services/customer/domain/customer.model';
+import {Customer} from '../services/customer/domain/customer.model';
 import {SMSGatewayFormComponent, SMSGatewayFormData} from './smsgateway/smsgateway.component';
-import {Value} from '../../services/catalog/domain/value.model';
-import {Catalog} from '../../services/catalog/domain/catalog.model';
-import {SMSConfiguration} from "../../services/notifications/domain/sms-configuration.model";
+import {Value} from '../services/catalog/domain/value.model';
+import {Catalog} from '../services/catalog/domain/catalog.model';
+import {SMSConfiguration} from "../services/notifications/domain/sms-configuration.model";
 
 @Component({
   selector: 'fims-sms-form-component',
   templateUrl: './sms.form.component.html'
 })
-export class CustomerFormComponent implements OnInit {
+export class SMSFormComponent implements OnInit {
 
-  private _customer: Customer;
+  private _smsConfiguration: SMSConfiguration;
 
   @Input('smsConfiguration') set smsConfiguration(smsConfiguration: SMSConfiguration) {
-    this._customer = customer;
+    this.smsConfiguration = smsConfiguration;
 
-    this.detailFormData = {
-      identifier: customer.identifier,
-      firstName: customer.givenName,
-      middleName: customer.middleName,
-      lastName: customer.surname,
-      dateOfBirth: customer.dateOfBirth,
-      member: customer.member
-    };
-
-    this.addressFormData = customer.address;
+    this.identifier = smsConfiguration.identifier;
 
     this.contactFormData = customer.contactDetails;
 
@@ -59,17 +50,12 @@ export class CustomerFormComponent implements OnInit {
 
   @Input('editMode') editMode: boolean;
 
-  @Output('onSave') onSave = new EventEmitter<Customer>();
+  @Output('onSave') onSave = new EventEmitter<SMSConfiguration>();
 
   @Output('onCancel') onCancel = new EventEmitter<void>();
 
   @ViewChild('detailsStep') step: TdStepComponent;
 
-  @ViewChild('detailForm') detailForm: CustomerDetailFormComponent;
-  detailFormData: CustomerDetailFormData;
-
-  @ViewChild('contactForm') contactForm: CustomerContactFormComponent;
-  contactFormData: ContactDetail[];
 
   @ViewChild('addressForm') addressForm: AddressFormComponent;
   addressFormData: Address;

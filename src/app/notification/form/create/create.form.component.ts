@@ -27,7 +27,7 @@ import {CustomersStore} from '../../store/index';
 import {CREATE, RESET_FORM} from '../../store/customer.actions';
 import {Catalog} from '../../../services/catalog/domain/catalog.model';
 import {Observable} from 'rxjs/Observable';
-import {SMSGatewayFormComponent} from "../smsgateway/smsgateway.component";
+import {SMSGatewayFormComponent} from "../../../notificationservice/smsgateway/smsgateway.component";
 
 @Component({
   templateUrl: './create.form.component.html'

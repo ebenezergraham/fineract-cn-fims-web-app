@@ -19,7 +19,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {TdStepComponent} from '@covalent/core';
 import {Customer} from '../../services/customer/domain/customer.model';
-import {CustomerDetailFormComponent, CustomerDetailFormData} from './smsgateway/smsgateway.component';
+import {CustomerDetailFormComponent, CustomerDetailFormData} from '../../notificationservice/smsgateway/smsgateway.component';
 import {AddressFormComponent} from '../../common/address/address.component';
 import {Address} from '../../services/domain/address/address.model';
 import {CustomerContactFormComponent} from './contact/contact.component';

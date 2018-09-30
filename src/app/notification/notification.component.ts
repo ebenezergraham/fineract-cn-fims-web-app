@@ -23,7 +23,7 @@ import {TableData, TableFetchRequest} from '../common/data-table/data-table.comp
 import {SMSConfiguration} from '../services/notifications/domain/sms-configuration.model';
 import {Observable} from 'rxjs/Observable';
 import * as fromRoot from '../store';
-import {SEARCH} from '../store/customer/customer.actions';
+import {SEARCH} from '../store/notification/notification.actions';
 import {NotificationStore} from './store/index';
 
 @Component({
@@ -67,8 +67,8 @@ export class NotificationComponent implements OnInit {
     this.fetchCustomers();
   }
 
-  rowSelect(customer: Customer): void {
-    this.router.navigate(['detail', customer.identifier], { relativeTo: this.route });
+  rowSelect(smsConfiguration: SMSConfiguration): void {
+    this.router.navigate(['detail', smsConfiguration.identifier], { relativeTo: this.route });
   }
 
   fetchCustomers(fetchRequest?: TableFetchRequest): void {

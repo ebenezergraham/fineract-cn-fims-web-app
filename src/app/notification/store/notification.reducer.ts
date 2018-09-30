@@ -16,10 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import * as customer from './customer.actions';
-import * as customerTasks from './customerTasks/customer-task.actions';
-import {Command} from '../../services/customer/domain/command.model';
-import {CustomerState} from '../../services/customer/domain/customer-state.model';
+import * as SMSConfiguration from './notification.actions';
+import {Command} from '../../services/notifications/domain/command.model';
 import {ResourceState} from '../../common/store/resource.reducer';
 
 export const initialState: ResourceState = {
@@ -29,14 +27,14 @@ export const initialState: ResourceState = {
   selectedId: null,
 };
 
-export function reducer(state = initialState, action: customer.Actions | customerTasks.Actions): ResourceState {
+export function reducer(state = initialState, action: SMSConfiguration.Actions): ResourceState {
 
   switch (action.type) {
 
     case customerTasks.EXECUTE_COMMAND_SUCCESS: {
       const payload = action.payload;
 
-      const customerId = payload.customerId;
+      const customerId = payload.;
       const command: Command = payload.command;
 
       const customer = state.entities[customerId];
