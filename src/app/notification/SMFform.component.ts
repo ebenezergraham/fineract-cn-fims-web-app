@@ -19,7 +19,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {TdStepComponent} from '@covalent/core';
 import {Customer} from '../services/customer/domain/customer.model';
-import {SMSGatewayFormComponent, SMSGatewayFormData} from './smsgateway/smsgateway.component';
+import {SMSGatewayFormComponent, SMSGatewayFormData} from '../notificationservice/smsgateway/smsgateway.component';
 import {Value} from '../services/catalog/domain/value.model';
 import {Catalog} from '../services/catalog/domain/catalog.model';
 import {SMSConfiguration} from "../services/notifications/domain/sms-configuration.model";

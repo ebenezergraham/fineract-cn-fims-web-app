@@ -22,7 +22,7 @@ import {FetchRequest} from '../services/domain/paging/fetch-request.model';
 import {TableData, TableFetchRequest} from '../common/data-table/data-table.component';
 import {SMSConfiguration} from '../services/notifications/domain/sms-configuration.model';
 import {Observable} from 'rxjs/Observable';
-import * as fromRoot from '../store';
+import * as fromRoot from '../store/index';
 import {SEARCH} from '../store/notification/notification.actions';
 import {NotificationStore} from './store/index';
 
