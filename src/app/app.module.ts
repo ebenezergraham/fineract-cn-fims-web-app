@@ -58,6 +58,7 @@ import {ReportingService} from './services/reporting/reporting.service';
 import {getSelectedLanguage} from './common/i18n/translate';
 import {ChequeService} from './services/cheque/cheque.service';
 import {PayrollService} from './services/payroll/payroll.service';
+import {NotificationsService} from "./services/notifications/notifications.service";
 
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -88,7 +89,6 @@ export function HttpLoaderFactory(http: Http) {
       SecurityApiEffects,
       SecurityRouteEffects,
       SecurityNotificationEffects,
-
       OfficeSearchApiEffects,
       EmployeeSearchApiEffects,
       CustomerSearchApiEffects,
@@ -118,6 +118,7 @@ export function HttpLoaderFactory(http: Http) {
     CountryService,
     CurrencyService,
     NotificationService,
+    NotificationsService,
     ExistsGuardService,
     ...appRoutingProviders,
     ImageService,

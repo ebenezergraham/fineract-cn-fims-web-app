@@ -114,4 +114,21 @@
       </mat-card>
     </div>
   </div>
+
+  <div layout="column" layout-gt-sm="row" class="inset">
+    <div flex-gt-sm="40" *hasPermission="{ id: 'customer_customers', accessLevel: 'READ'}">
+      <mat-card>
+        <mat-card-title translate>Notifications</mat-card-title>
+        <mat-card-subtitle translate>Manage Notification Gateways.</mat-card-subtitle>
+        <mat-card-actions>
+          <a mat-button color="accent" class="text-upper" [routerLink]="['/notifications/email']" *hasPermission="{ id: 'customer_customer', accessLevel: 'CHANGE'}">
+            <span translate>Create Email Configuration</span>
+          </a>
+          <a mat-button color="accent" class="text-upper" [routerLink]="['/notifications/sms']" *hasPermission="{ id: 'customer_customer', accessLevel: 'CHANGE'}">
+            <span translate>Create SMS Configuration</span>
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
 </div>

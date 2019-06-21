@@ -21,7 +21,7 @@
     }
   },
   "/api/accounting": {
-    "target": "http://localhost:2025",
+    "target": "http://localhost:2033",
     "secure": false,
     "pathRewrite": {
       "^/api/accounting": "/accounting"
@@ -75,6 +75,14 @@
     "secure": false,
     "pathRewrite": {
       "^/api/group": "/group"
+    }
+  },
+
+  "/api/notifications": {
+    "target": "http://localhost:2025",
+    "secure": false,
+    "pathRewrite": {
+      "^/api/notifications": "/notification"
     }
   }
 }
